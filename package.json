@@ -1,0 +1,13 @@
+{
+  "name": "election-assistant",
+  "version": "1.0.0",
+  "description": "Interactive Election Process Assistant",
+  "main": "app.js",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
