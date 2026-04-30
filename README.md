@@ -1,37 +1,48 @@
-# Interactive Election Process Assistant
+# VoteWise AI
 
-An interactive, educational web application designed to guide users through the complexities of the election process, from the initial announcement to the formation of the government.
+An intelligent, interactive, and personalized assistant designed to help users understand the election process in India and globally.
 
 Built for the **Google Prompt Solution Challenge**.
 
-## Chosen Vertical
-**Civics & Governance / Education**  
-The goal of this project is to democratize knowledge about how elections work globally, empowering voters with easy-to-digest, interactive information. By demystifying the democratic process, it encourages informed civic participation.
+## The Problem
+Many citizens, especially first-time voters, find the election process confusing due to a lack of awareness, complex procedures, and scattered information. This leads to:
+- Low voter participation
+- Susceptibility to misinformation
+- Missed registration deadlines
 
-## Approach and Logic
-The application is designed as a single-page Interactive Assistant with five core functional tabs:
+## The Solution
+**VoteWise AI** is not just a chatbot. It simplifies the entire democratic process through an interactive AI assistant that provides clear, personalized, and step-by-step guidance. It is:
+- **Guided** (Step-by-step checklists)
+- **Personalized** (Based on the user's profile and voter status)
+- **Localized** (Based on region)
+- **Interactive** (Chat + Voice + Quizzes)
 
-1. **Election Timeline**: A visual, chronological representation of the 7 main phases of an election.
-2. **Step by Step**: Deep-dive interactive cards expanding on specific mechanics of the election cycle.
-3. **Country Comparison**: A responsive data table highlighting the differences in electoral systems across India, Germany, USA, Australia, UK, and France.
-4. **Test Yourself**: A state-driven interactive quiz that evaluates the user's understanding and provides immediate feedback.
-5. **Glossary**: A searchable index of complex civic terminology simplified for the general public.
+## Core Features & Modes
+1. **First-Time Voter Mode**: Guided onboarding and step-by-step registration checklists.
+2. **Smart Timeline Generator**: Input a state or election name to receive a full election schedule.
+3. **Document Verification (AI Vision)**: Upload ID to check validity (Proposed).
+4. **Myth Buster Mode**: Detects misinformation and provides correct, neutral facts.
+5. **Offline Lite Mode**: Basic guidance available without an active internet connection.
+6. **Voting Readiness Score**: Visualizes the % completion of voting steps.
+7. **Gamification**: Earn badges like "Registered Voter" and "Informed Citizen" (Inspired by Duolingo).
 
-### Technical Implementation
-- **Zero-Dependency Architecture**: Built using pure Vanilla HTML, CSS, and JavaScript to ensure maximum performance, immediate load times, and a footprint well under the 10 MB limit (currently ~50KB).
-- **CSS View Transitions API**: Leverages modern browser capabilities (`document.startViewTransition()`) to provide native, smooth cross-fade animations when switching between tabs without heavy JS animation libraries.
-- **Glassmorphism Design**: Utilizes CSS backdrop filters and smooth gradient typography to create a premium, modern user interface.
-- **Dual AI Panel Integration**: Every section features context-aware "Ask Claude" and "Ask Gemini" action chips. These chips launch dynamic modals that provide users with highly specific prompts to copy and paste into their AI of choice, acting as a bridge to deeper conversational learning.
+## Proposed Tech Stack Architecture
+While this repository currently hosts a lightweight Vanilla JS frontend prototype demonstrating the UI and Gemini API integration, the full production architecture is designed as follows:
+- **Frontend**: React.js / Next.js
+- **Backend**: Node.js / Firebase
+- **Database**: Firestore
+- **AI Integration**: Gemini API (System prompt engineered for VoteWise AI)
+- **Maps**: Google Maps API (For polling booth navigation)
+- **Authentication**: Firebase Auth
 
-## How the Solution Works
-1. Open `index.html` in any modern web browser.
-2. Navigate through the top tabs to access different learning modules.
-3. Interact with the Step-by-Step cards to expand details.
-4. Use the dynamic Search Bar in the Glossary to filter terms instantly.
-5. Click the "Ask Claude" or "Ask Gemini" chips to generate context-specific questions for further exploration in your preferred AI tool.
+## Gemini API Integration (VoteWise Persona)
+The core of this application is powered by the **Gemini API**. It utilizes advanced `system_instructions` to enforce the VoteWise AI persona:
+- **Goals**: Simplify complex procedures, provide accurate/unbiased info, personalize responses, and encourage voting.
+- **Behavior Rules**: Uses conversational language, provides direct answers followed by step-by-step checklists, remains strictly neutral, and always ends with an engaging follow-up question.
+- **Response Format**: Direct Answer → Step-by-Step Explanation → Follow-up Question.
 
-## Assumptions Made
-- **Target Audience**: The primary user is assumed to be someone with basic to intermediate knowledge of civics looking for a visual and interactive way to study global electoral systems.
-- **Browser Compatibility**: It is assumed the user is running a modern web browser (Chrome 111+, Edge 111+, or Safari 18+) to fully experience the CSS View Transitions. Fallbacks are implemented for older browsers to still function correctly without the animation.
-- **Google Services Integration**: The prompt and solution are built with Google Gemini in mind, incorporating "Ask Gemini" chips to drive deeper engagement with Google's AI ecosystem.
-- **Development Environment**: We assumed that due to constraints (NPM connectivity issues during scaffolding), a robust Vanilla JS approach was superior to forcing a framework, ensuring flawless execution and code maintainability within the single branch constraint.
+## How to Run the Prototype Locally
+1. Clone this repository.
+2. Open the directory in your terminal and run a local server (e.g., `npm run dev` if `serve` is configured, or `python3 -m http.server`).
+3. Open the provided `localhost` link in your browser.
+4. Navigate to any tab, click an "Ask Gemini" button, and enter your Gemini API Key (saved securely in your local browser storage) to experience the VoteWise AI persona live!

@@ -300,21 +300,148 @@ function initAskAIChips() {
     const modal = document.getElementById('ai-modal');
     const closeBtn = document.getElementById('close-modal');
     const promptText = document.getElementById('ai-prompt-text');
-    const copyBtn = document.getElementById('copy-prompt-btn');
     const modalTitle = document.getElementById('modal-title');
-    const modalDesc = document.getElementById('modal-desc');
+    
+    // New Elements
+    const apiKeySection = document.getElementById('api-key-section');
+    const chatSection = document.getElementById('chat-section');
+    const apiKeyInput = document.getElementById('gemini-api-key');
+    const saveKeyBtn = document.getElementById('save-key-btn');
+    const clearKeyBtn = document.getElementById('clear-key-btn');
+    const loadingSpinner = document.getElementById('loading-spinner');
+    const responseContent = document.getElementById('ai-response-content');
+
+    // Check for existing API key
+    let currentApiKey = localStorage.getItem('gemini_api_key');
+
+    // Simple markdown parser for Gemini response
+    function parseMarkdown(text) {
+        let html = text
+            // Headers
+            .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+            .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+            .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+            // Bold
+            .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
+            // Italic
+            .replace(/\*(.*)\*/gim, '<em>$1</em>')
+            // Fix overlapping tags from simple regex
+            .replace(/^\* (.*$)/gim, '<li>$1</li>')
+            // Paragraphs & Line Breaks
+            .replace(/\n\n/g, '</p><p>')
+            .replace(/\n/g, '<br/>');
+        return '<p>' + html + '</p>';
+    }
+
+    const voteWiseSystemPrompt = `You are VoteWise AI, an intelligent and user-friendly assistant designed to help users understand the election process in India (and globally when asked).
+
+Your goals:
+1. Simplify complex election procedures into easy, step-by-step explanations.
+2. Provide accurate, updated, and unbiased information.
+3. Personalize responses based on user's age, location, and election type.
+4. Encourage informed and responsible voting without influencing political opinions.
+
+Behavior Rules:
+- Use simple, conversational language.
+- Always start with a direct answer.
+- Break answers into steps, timelines, or checklists.
+- Ask follow-up questions when needed (e.g., "Are you a first-time voter?").
+- Never promote any political party or candidate.
+- Always remain neutral and fact-based.
+
+Core Features You Must Support:
+1. Voter Registration Guidance
+2. Election Timeline Explanation
+3. Required Documents Checklist
+4. Polling Day Instructions
+5. FAQ Handling
+6. Localized Information
+7. Myth-busting
+
+Response Format:
+- Direct answer first
+- Then step-by-step explanation
+- End with a helpful follow-up question`;
+
+    async function fetchGeminiResponse(prompt) {
+        if (!currentApiKey) return;
+        
+        loadingSpinner.classList.remove('hidden');
+        responseContent.innerHTML = '';
+        
+        try {
+            // Using gemini-2.5-flash endpoint
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${currentApiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    system_instruction: {
+                        parts: [{ text: voteWiseSystemPrompt }]
+                    },
+                    contents: [{ parts: [{ text: prompt }] }]
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error('API request failed. Please check your API key.');
+            }
+            
+            const data = await response.json();
+            const text = data.candidates[0].content.parts[0].text;
+            responseContent.innerHTML = parseMarkdown(text);
+        } catch (error) {
+            responseContent.innerHTML = `<p style="color: var(--danger);"><strong>Error:</strong> ${error.message}</p>`;
+        } finally {
+            loadingSpinner.classList.add('hidden');
+        }
+    }
+
+    // Modal UI state management
+    function updateModalState() {
+        if (currentApiKey) {
+            apiKeySection.classList.add('hidden');
+            chatSection.classList.remove('hidden');
+        } else {
+            apiKeySection.classList.remove('hidden');
+            chatSection.classList.add('hidden');
+        }
+    }
+
+    // Event Listeners for API Key Management
+    saveKeyBtn.addEventListener('click', () => {
+        const key = apiKeyInput.value.trim();
+        if (key) {
+            localStorage.setItem('gemini_api_key', key);
+            currentApiKey = key;
+            apiKeyInput.value = '';
+            updateModalState();
+            // Automatically fetch if there's a prompt queued
+            if (promptText.innerText) {
+                fetchGeminiResponse(promptText.innerText);
+            }
+        }
+    });
+
+    clearKeyBtn.addEventListener('click', () => {
+        localStorage.removeItem('gemini_api_key');
+        currentApiKey = null;
+        updateModalState();
+    });
 
     chips.forEach(chip => {
         chip.addEventListener('click', (e) => {
             const prompt = chip.getAttribute('data-prompt');
-            const aiName = chip.getAttribute('data-ai') || 'AI';
+            const aiName = chip.getAttribute('data-ai') || 'Gemini';
             
             promptText.innerText = prompt;
             modalTitle.innerText = `Ask ${aiName}`;
-            modalDesc.innerText = `Copy this prompt and send it to ${aiName} to dive deeper:`;
             
+            updateModalState();
             modal.classList.remove('hidden');
-            copyBtn.innerText = 'Copy';
+
+            if (currentApiKey) {
+                fetchGeminiResponse(prompt);
+            }
         });
     });
 
@@ -325,15 +452,5 @@ function initAskAIChips() {
     // Close on overlay click
     document.querySelector('.modal-overlay').addEventListener('click', () => {
         modal.classList.add('hidden');
-    });
-
-    copyBtn.addEventListener('click', () => {
-        const text = promptText.innerText;
-        navigator.clipboard.writeText(text).then(() => {
-            copyBtn.innerText = 'Copied! ✨';
-            setTimeout(() => {
-                copyBtn.innerText = 'Copy';
-            }, 2000);
-        });
     });
 }
