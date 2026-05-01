@@ -1,17 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- AI Chat Logic ---
     const chatWindow = document.getElementById('chat-window');
-    const chatInput = document.getElementById('chat-input');
-    const sendBtn = document.getElementById('send-btn');
     const promptChips = document.querySelectorAll('.prompt-chip');
 
-    if (!chatWindow || !chatInput || !sendBtn) return;
-
-    // API Calling
-    // The backend now handles the Gemini API calls securely
-    function getGeminiApiUrl() {
-        return `/api/chat`;
-    }
+    if (!chatWindow) return;
 
     let chatHistory = [];
 
@@ -28,8 +20,17 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (sender === 'ai') {
             // Render basic markdown (bold, lists, breaks)
-            let formattedText = text.replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>');
-            formattedText = formattedText.replace(/\\n/g, '<br>');
+            let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            formattedText = formattedText.replace(/\n/g, '<br>');
+            formattedText = formattedText.replace(/✅/g, '<br>✅');
+            formattedText = formattedText.replace(/1️⃣/g, '<br>1️⃣');
+            formattedText = formattedText.replace(/2️⃣/g, '<br>2️⃣');
+            formattedText = formattedText.replace(/3️⃣/g, '<br>3️⃣');
+            formattedText = formattedText.replace(/4️⃣/g, '<br>4️⃣');
+            formattedText = formattedText.replace(/5️⃣/g, '<br>5️⃣');
+            formattedText = formattedText.replace(/6️⃣/g, '<br>6️⃣');
+            formattedText = formattedText.replace(/7️⃣/g, '<br>7️⃣');
+            if(formattedText.startsWith('<br>')) formattedText = formattedText.substring(4);
             contentDiv.innerHTML = formattedText;
         } else {
             contentDiv.innerText = text;
@@ -41,226 +42,73 @@ document.addEventListener('DOMContentLoaded', () => {
         return messageDiv;
     }
 
-    function promptForApiKey(errorMsg) {
-        const aiMessageDiv = addMessage(`⚠️ Oops! The API request failed. (${errorMsg})\\n\\nIt seems the default API key has reached its limit or is invalid. Please enter your own Google Gemini API key to continue chatting.`, 'ai');
-        
-        const keyPromptBox = document.createElement('div');
-        keyPromptBox.style.marginTop = '1rem';
-        keyPromptBox.style.padding = '1rem';
-        keyPromptBox.style.background = 'rgba(255, 255, 255, 0.8)';
-        keyPromptBox.style.borderRadius = 'var(--radius-md)';
-        keyPromptBox.style.border = '1px solid #ccc';
-        
-        keyPromptBox.innerHTML = `
-            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; font-weight: 600;">Enter your Gemini API Key:</p>
-            <div style="display: flex; gap: 0.5rem;">
-                <input type="password" id="custom-api-key-input" placeholder="AIzaSy..." style="flex: 1; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
-                <button id="save-custom-key-btn" class="btn btn-primary small">Save Key</button>
-            </div>
-            <p style="font-size: 0.75rem; color: #666; margin-top: 0.5rem;">Your key is stored securely in your browser's local storage and is only used to connect directly to Google's API.</p>
-        `;
-        
-        aiMessageDiv.appendChild(keyPromptBox);
-        chatWindow.scrollTop = chatWindow.scrollHeight;
-        
-        const saveBtn = keyPromptBox.querySelector('#save-custom-key-btn');
-        const inputField = keyPromptBox.querySelector('#custom-api-key-input');
-        
-        saveBtn.addEventListener('click', () => {
-            const key = inputField.value.trim();
-            if (key) {
-                localStorage.setItem('user_gemini_api_key', key);
-                keyPromptBox.innerHTML = '<p style="color: var(--success-green); font-weight: 600;">✅ API Key saved! You can now send your message again.</p>';
-            }
-        });
-    }
+    // 30 Hardcoded Questions Database
+    const qaDatabase = {
+        "How do I register to vote?": "To register visit vote.gov or your state election website. You need your name, address, date of birth, and ID number. Most states allow online registration. Register at least 15-30 days before election day!",
+        "What is the voter registration deadline?": "Most states require registration 15-30 days before election day. Some states allow same-day registration. Always check your state's official election website for your exact deadline.",
+        "Am I eligible to vote?": "You are eligible if you are:\n✅ A US citizen\n✅ At least 18 years old on election day\n✅ A resident of your registered state\n✅ Not serving a felony sentence\nMeet all four? You can vote!",
+        "What ID do I need to vote?": "Most states accept:\n✅ Driver's license\n✅ State ID card\n✅ Passport\n✅ Military ID\nSome states accept utility bills too.\nCheck your state's specific rules!",
+        "Where do I go to vote?": "You vote at your assigned polling station based on your registered address. Find yours at vote.gov by entering your address. Many states also mail you a voter card showing your exact polling location.",
+        "What time do polls open and close?": "Most polls open between 6am-7am and close between 7pm-8pm on election day. Times vary by state. If you are in line before closing time you must be allowed to vote!",
+        "What happens on election day?": "On election day you:\n1️⃣ Go to your polling station with ID\n2️⃣ Check in with election worker\n3️⃣ Receive your official ballot\n4️⃣ Vote privately in a booth\n5️⃣ Submit your ballot\n6️⃣ Get your I Voted sticker! 🎉",
+        "How do I cast my vote?": "Go to your polling station with your ID.\nCheck in and receive your ballot.\nGo to a private booth and mark choices.\nReview everything carefully.\nSubmit your ballot in the machine or box.\nYou are done — great job!",
+        "What is early voting?": "Early voting lets you vote before official election day. It starts 1-2 weeks early. Go to an early voting location, show ID, and vote just like on election day. Perfect for avoiding long lines!",
+        "What is mail-in voting?": "Mail-in voting lets you vote from home!\nRequest a ballot from your election office.\nFill it out at home carefully.\nMail it back before the deadline or drop at an official ballot drop box.\nSafe, legal, and fully secure!",
+        "How are votes counted?": "After polls close all ballots are collected. Secure scanning machines count them accurately and quickly. Mail-in ballots may take extra days. All counting is watched by representatives from all parties to ensure complete fairness.",
+        "When are results announced?": "Preliminary results come election night. Final official results may take days or weeks for close races or many mail-in ballots. Official results are certified by states within 2-4 weeks after election day.",
+        "What is the electoral college?": "The Electoral College elects the President. Each state gets electoral votes equal to its senators plus representatives. 538 total electoral votes exist. A candidate needs 270 votes to win! Your presidential vote chooses electors who then cast electoral votes.",
+        "What is a primary election?": "A primary happens before the general election. Democrats choose their candidate. Republicans choose their candidate. Winners then compete against each other in the main general election. Primaries narrow down the field!",
+        "What is Congress?": "Congress makes US laws. It has two parts:\n🏛️ Senate: 100 senators, 2 per state, 6-year terms\n🏛️ House: 435 members based on state population, 2-year terms\nBoth parts must agree to pass a law!",
+        "How long is a presidential term?": "The US President serves a 4-year term. Maximum 2 terms — 8 years total. Presidential elections happen every 4 years always on the first Tuesday after the first Monday in November!",
+        "Why is voting important?": "Voting is your most powerful right!\n✅ You choose your leaders directly\n✅ You influence laws affecting your life\n✅ Healthcare, education, taxes all depend on who gets elected\n✅ Many elections decided by few votes\nEvery single vote truly matters!",
+        "What if I make a mistake on my ballot?": "Tell an election worker immediately BEFORE submitting your ballot. They will give you a fresh new ballot. Once submitted you cannot change it. Always review your choices carefully before submitting!",
+        "Can I register online?": "Yes! Most states offer online registration at vote.gov or your state election website. You need a valid driver's license or state ID to register online. A few states still require paper registration by mail.",
+        "What is a polling station?": "A polling station is the official location where you cast your ballot on election day. Usually set up in schools, community centers, libraries, or fire stations. Each voter is assigned one based on their home address.",
+        "What is a recount?": "A recount happens when a race is very close usually within 0.5% of total votes. All ballots are counted again carefully. Watched by all party representatives to ensure complete fairness and accuracy.",
+        "What is absentee voting?": "Absentee voting is another name for mail-in voting. Any eligible voter can request an absentee ballot in most states. Fill it out at home and return by mail or official drop box. Completely legal and fully secure!",
+        "Can I vote if I moved recently?": "Update your registration to your new address at vote.gov first. Deadlines are same as new registration deadlines. Some states allow election day address updates. Always update before the deadline!",
+        "What is a ballot?": "A ballot is the official document you use to cast your votes. It lists all races and candidates you can vote for. Can be paper you mark by hand or electronic touchscreen. All ballots are secure official government documents.",
+        "How does the president get elected?": "The presidential election process:\n1️⃣ Primaries — parties pick candidates\n2️⃣ Conventions — candidates made official\n3️⃣ Campaigns — debates and rallies\n4️⃣ Election Day — citizens vote\n5️⃣ Electoral College votes in December\n6️⃣ Congress certifies in January\n7️⃣ Inauguration on January 20th!",
+        "What is voter suppression?": "Voter suppression means any illegal tactic used to stop eligible voters from voting. Spreading false info about election rules or locations is suppression. It is illegal in the United States. Report it to your state election authority immediately!",
+        "What is a swing state?": "A swing state is where both major parties have similar support levels. The winner is hard to predict. These states often decide presidential elections. Examples: Pennsylvania, Michigan, Wisconsin, Arizona, and Georgia.",
+        "How many people vote in US elections?": "Voter turnout varies by election:\n🗳️ 2020 Presidential: 159 million voters — 66% of eligible voters — highest turnout in over 100 years!\n📊 Midterm elections: 40-50% turnout\n🏘️ Local elections: sometimes only 20%\nYour vote matters more in low turnout!",
+        "When is election day in the US?": "Election Day is always the first Tuesday after the first Monday in November. Presidential elections every 4 years. Midterm elections every 2 years. Local elections vary by city and state. Mark your calendar every November!",
+        "What happens after the election?": "After election day:\n✅ Votes counted and tallied\n✅ Results reported publicly\n✅ States certify official results\n✅ Electoral College meets in December\n✅ Congress certifies in January\n✅ Inauguration on January 20th\nThe full process takes about 2-3 months!"
+    };
 
-    const systemInstruction = `You are JanVote AI, an intelligent assistant that helps users understand the election process in a simple, interactive, and step-by-step way.
-
-🎯 YOUR PURPOSE:
-- Explain voting and election processes clearly
-- Guide users step-by-step (registration → voting → results)
-- Provide accurate and neutral information
-- Personalize responses based on user intent
-
-🧠 BEHAVIOR RULES:
-- Always start with a clear, direct answer
-- Then explain in simple step-by-step format
-- Keep responses clean, structured, and easy to read
-- Use bullet points when needed
-- Ask helpful follow-up questions when relevant
-- DO NOT use scripted or placeholder responses
-- DO NOT say things like: "Let me check..." or "Here is an example..."
-- Give real, useful answers immediately
-
-📌 STRICT RESPONSE FORMAT:
-You MUST format EVERY response exactly like this, no exceptions:
-
-**Answer:**
-[Short direct answer here]
-
-**Steps:**
-- [Actionable step 1]
-- [Actionable step 2]
-
-**Tip:**
-💡 [One single helpful tip]
-
-📚 CORE FEATURES YOU MUST SUPPORT:
-1. Voter registration guidance
-2. Election timeline explanation
-3. Polling booth guidance
-4. Required documents checklist
-5. Voting day instructions
-6. FAQ handling
-7. Myth-busting (correct misinformation clearly)
-
-🌍 LOCALIZATION:
-- If user asks location-based questions (e.g., booth location), respond clearly with guidance on how to find it. Keep answers practical and actionable.
-
-💬 TONE:
-- Friendly but professional
-- Clear and confident
-- Never robotic
-- Never biased toward any political party
-
-🚫 IMPORTANT RESTRICTIONS:
-- Do NOT generate fake data or exact booth locations
-- Instead guide users to official methods
-- Do NOT give incomplete answers
-- Avoid filler phrases`;
-
-    async function sendMessage(text) {
+    function sendMessage(text) {
         if (!text.trim()) return;
 
         // User message
         addMessage(text, 'user');
-        chatInput.value = '';
         
         chatHistory.push({ role: "user", parts: [{ text: text }] });
 
         // Show typing indicator
         const loadingEl = addMessage('<div class="typing-indicator"><span></span><span></span><span></span></div>', 'ai');
 
-        try {
-            const explainToggle = document.getElementById('explain-simply-toggle');
-            let finalSystemInstruction = systemInstruction;
-            if (explainToggle && explainToggle.checked) {
-                finalSystemInstruction += "\n\nCRITICAL: The user has requested 'Explain Simply'. You MUST explain this as if speaking to an absolute beginner. Use very simple words, analogies, and keep it extremely easy to understand.";
-            }
-
-            // Updated to hit local backend
-            const response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ prompt: text })
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            
+        setTimeout(() => {
             // Remove typing indicator
             loadingEl.remove();
-            
-            if (data.response) {
-                const aiText = data.response;
-                const aiMessageDiv = addMessage(aiText, 'ai');
-                chatHistory.push({ role: "model", parts: [{ text: aiText }] });
-                
-                // Add Dynamic Suggestions
-                const suggestionsBox = document.createElement('div');
-                suggestionsBox.style.marginTop = '0.5rem';
-                suggestionsBox.innerHTML = `
-                    <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.3rem;">You might also want to know:</p>
-                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                        <button class="dyn-chip" style="font-size: 0.8rem; padding: 0.3rem 0.6rem; border: 1px solid var(--primary-blue); border-radius: 12px; background: transparent; color: var(--primary-blue); cursor: pointer;">How to register?</button>
-                        <button class="dyn-chip" style="font-size: 0.8rem; padding: 0.3rem 0.6rem; border: 1px solid var(--primary-blue); border-radius: 12px; background: transparent; color: var(--primary-blue); cursor: pointer;">Required documents?</button>
-                        <button class="dyn-chip" style="font-size: 0.8rem; padding: 0.3rem 0.6rem; border: 1px solid var(--primary-blue); border-radius: 12px; background: transparent; color: var(--primary-blue); cursor: pointer;">Polling booth info?</button>
-                    </div>
-                    
-                    <div style="margin-top: 1rem; padding-top: 0.8rem; border-top: 1px solid #eee;">
-                        <p style="font-size: 0.85rem; font-weight: 600; color: var(--primary-blue); margin-bottom: 0.5rem;">👉 Want to take action?</p>
-                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                            <a href="https://voters.eci.gov.in/" class="btn btn-primary small gov-link" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">Register Now 🔗</a>
-                            <a href="https://electoralsearch.eci.gov.in/" class="btn btn-outline small gov-link" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">Check Status 🔗</a>
-                            <a href="https://electoralsearch.eci.gov.in/" class="btn btn-outline small gov-link" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">Find Booth 🔗</a>
-                        </div>
-                    </div>
-                `;
-                aiMessageDiv.appendChild(suggestionsBox);
-                
-                // Attach click handlers to dynamic suggestions
-                suggestionsBox.querySelectorAll('.dyn-chip').forEach(chip => {
-                    chip.addEventListener('click', () => {
-                        chatInput.value = chip.innerText;
-                        sendMessage(chatInput.value);
-                    });
-                });
-                
-                chatWindow.scrollTop = chatWindow.scrollHeight;
-            } else {
-                promptForApiKey(data.error ? data.error.message : 'Unknown error');
-            }
-        } catch (err) {
-            loadingEl.remove();
-            if (err.name === 'AbortError') {
-                promptForApiKey('Request timed out');
-            } else {
-                promptForApiKey('Network Error');
-            }
-        }
-    }
 
-    sendBtn.addEventListener('click', () => sendMessage(chatInput.value));
-    chatInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendMessage(chatInput.value);
-    });
+            // Find exact match or default fallback
+            let answerText = qaDatabase[text.trim()];
+            
+            if (!answerText) {
+                // simple fallback
+                answerText = "For this information please visit your official government election website at vote.gov 🗳️";
+            }
+
+            addMessage(answerText, 'ai');
+            chatHistory.push({ role: "model", parts: [{ text: answerText }] });
+
+        }, 800); // Mock AI delay
+    }
 
     promptChips.forEach(chip => {
         chip.addEventListener('click', () => {
-            chatInput.value = chip.innerText;
-            const suggestedContainer = document.getElementById('suggested-prompts');
-            if (suggestedContainer) suggestedContainer.style.display = 'none'; // hide chips after use
-            sendMessage(chatInput.value);
+            sendMessage(chip.innerText);
         });
     });
 
-    // Voice Input Logic
-    const micBtn = document.getElementById('mic-btn');
-    if (micBtn && (window.SpeechRecognition || window.webkitSpeechRecognition)) {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new SpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = false;
-
-        micBtn.addEventListener('click', () => {
-            micBtn.style.backgroundColor = 'var(--danger-red)';
-            micBtn.style.color = 'white';
-            recognition.start();
-        });
-
-        recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript;
-            chatInput.value = transcript;
-            micBtn.style.backgroundColor = 'transparent';
-            micBtn.style.color = 'inherit';
-        };
-
-        recognition.onerror = (event) => {
-            console.error('Speech recognition error', event.error);
-            micBtn.style.backgroundColor = 'transparent';
-            micBtn.style.color = 'inherit';
-        };
-
-        recognition.onend = () => {
-            micBtn.style.backgroundColor = 'transparent';
-            micBtn.style.color = 'inherit';
-        };
-    }
 });
