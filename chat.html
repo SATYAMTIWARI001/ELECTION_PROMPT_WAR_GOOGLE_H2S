@@ -47,13 +47,10 @@
             </div>
             
             <div class="chat-bottom-wrapper">
-                <div class="suggested-prompts" id="suggested-prompts" style="display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem;">
-                    <button class="prompt-chip">What is voting</button>
-                    <button class="prompt-chip">Who can vote</button>
-                    <button class="prompt-chip">What is EVM</button>
-                    <button class="prompt-chip">What is NOTA</button>
-                    <button class="prompt-chip">Required documents</button>
-                </div>
+                <!-- Suggestion chips will now be dynamically inserted into the chat window -->
+                <button id="show-questions-btn" class="btn btn-outline" style="display: none; width: 100%; margin-bottom: 0.5rem; font-size: 13px; padding: 8px; border-radius: var(--radius-md);">
+                    <span style="margin-right: 5px;">📄</span> Show all questions
+                </button>
                 <div class="chat-input-area glass-card">
                     <button id="mic-btn" class="btn btn-outline" style="padding: 0.8rem; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">🎙️</button>
                     <input type="text" id="chat-input" placeholder="Ask anything about voting..." style="flex: 1;">
