@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - JanVote AI</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page-transition">
+    <main class="login-page">
+        <!-- Left Side: Branding -->
+        <div class="login-left">
+            <span class="logo-icon" style="font-size: 4rem; margin-bottom: 1rem;">🏛️</span>
+            <h1>Welcome to JanVote AI</h1>
+            <p>Your intelligent, personalized guide to the Indian election process. Create your civic profile to get started.</p>
+        </div>
+        
+        <!-- Right Side: Login Form -->
+        <div class="login-right">
+            <div class="glass-card login-card">
+                <h2>Create Profile</h2>
+                <p>Enter your details to set up your civic dashboard.</p>
+                
+                <form id="dedicated-login-form">
+                    <input type="text" id="login-name-input" placeholder="Your Full Name" required style="margin-bottom: 1rem; width: 100%; padding: 0.8rem; border-radius: var(--radius-md); border: 1px solid #ccc; font-family: 'Inter', sans-serif;">
+                    
+                    <input type="number" id="login-age-input" placeholder="Your Age" required min="18" max="120" style="margin-bottom: 1rem; width: 100%; padding: 0.8rem; border-radius: var(--radius-md); border: 1px solid #ccc; font-family: 'Inter', sans-serif;">
+                    
+                    <select id="login-state-input" required style="margin-bottom: 1rem; width: 100%; padding: 0.8rem; border-radius: var(--radius-md); border: 1px solid #ccc; font-family: 'Inter', sans-serif;">
+                        <option value="">Select your state...</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    
+                    <input type="email" id="login-email-input" placeholder="Email Address (Optional)" style="margin-bottom: 2rem; width: 100%; padding: 0.8rem; border-radius: var(--radius-md); border: 1px solid #ccc; font-family: 'Inter', sans-serif;">
+                    
+                    <button type="submit" id="login-submit-btn" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">Continue to Dashboard</button>
+                    <a href="index.html" class="btn btn-outline" style="width: 100%; display: block; text-align: center;">Continue as Guest</a>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

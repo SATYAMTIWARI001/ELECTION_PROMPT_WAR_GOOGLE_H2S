@@ -31,6 +31,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const storedState = localStorage.getItem('user_state');
         const storedEmail = localStorage.getItem('user_email');
         
+        const currentPageName = window.location.pathname.split('/').pop() || 'index.html';
+        const isLoginPage = currentPageName === 'login.html';
+        
+        // Global Auth Check
+        if (!storedName && !isLoginPage) {
+            window.location.href = 'login.html';
+            return;
+        }
+
         if (storedName) {
             if (loginBtn) loginBtn.parentElement.style.display = 'none';
             if (userProfileContainer) {
@@ -252,8 +261,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginEmailInput = document.getElementById('login-email-input');
     const loginSubmitBtn = document.getElementById('login-submit-btn');
 
-    if (loginForm && loginNameInput) {
-        loginForm.addEventListener('submit', (e) => {
+    // Handle dedicated login form or old modal form if it still exists
+    const currentLoginForm = document.getElementById('dedicated-login-form') || loginForm;
+
+    if (currentLoginForm && loginNameInput) {
+        currentLoginForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
             if(loginSubmitBtn) {
@@ -330,7 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem('user_email');
             localStorage.removeItem('readiness_state');
             localStorage.removeItem('user_docs');
-            window.location.href = 'index.html';
+            window.location.href = 'login.html';
         });
     }
 
@@ -495,7 +507,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 7. Mock Constituency PIN Search
+        // Mock Constituency PIN Search
     const pinBtn = document.getElementById('pin-search-btn');
     const pinInput = document.getElementById('pin-input');
     const constResult = document.getElementById('constituency-result');
@@ -508,4 +520,30 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    
+    // 8. Page Transitions
+    const pt = document.querySelector('.page-transition');
+    if (pt) {
+        pt.classList.add('fade-in');
+    }
+
+    document.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            const target = link.getAttribute('target');
+            // Intercept internal navigation for transitions
+            if (href && !href.startsWith('#') && !href.startsWith('javascript') && target !== '_blank' && !link.classList.contains('gov-link')) {
+                e.preventDefault();
+                if (pt) {
+                    pt.classList.remove('fade-in');
+                    pt.classList.add('fade-out');
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 350);
+                } else {
+                    window.location.href = href;
+                }
+            }
+        });
+    });
 });

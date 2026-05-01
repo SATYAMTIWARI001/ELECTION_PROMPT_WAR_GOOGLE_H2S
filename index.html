@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="page-transition">
 
     <!-- Sticky Navbar -->
     <nav class="navbar">
@@ -268,31 +268,7 @@
         <a href="quiz.html"><span class="icon">🧠</span> Quiz</a>
     </nav>
 
-    <!-- Login Modal -->
-    <div id="login-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button id="modal-close" class="modal-close">&times;</button>
-            <div class="section-header center" style="margin-bottom: 1.5rem;">
-                <h2>Welcome</h2>
-                <p>Create your civic profile</p>
-            </div>
-            
-            <form id="login-form" class="modal-form active">
-                <input type="text" id="login-name-input" placeholder="Your Full Name" required style="margin-bottom: 1rem; width: 100%; padding: 0.8rem; border-radius: var(--radius-sm); border: 1px solid #ccc;">
-                <input type="number" id="login-age-input" placeholder="Your Age" required min="18" max="120" style="margin-bottom: 1rem; width: 100%; padding: 0.8rem; border-radius: var(--radius-sm); border: 1px solid #ccc;">
-                <select id="login-state-input" required style="margin-bottom: 1rem; width: 100%; padding: 0.8rem; border-radius: var(--radius-sm); border: 1px solid #ccc;">
-                    <option value="">Select your state...</option>
-                    <option value="Maharashtra">Maharashtra</option>
-                    <option value="Delhi">Delhi</option>
-                    <option value="Karnataka">Karnataka</option>
-                    <option value="Uttar Pradesh">Uttar Pradesh</option>
-                    <option value="Other">Other</option>
-                </select>
-                <input type="email" id="login-email-input" placeholder="Email Address (Optional)" style="margin-bottom: 1.5rem; width: 100%; padding: 0.8rem; border-radius: var(--radius-sm); border: 1px solid #ccc;">
-                <button type="submit" id="login-submit-btn" class="btn btn-primary" style="width: 100%;">Continue</button>
-            </form>
-        </div>
-    </div>
+
 
     <!-- Profile Modal -->
     <div id="profile-modal" class="modal-overlay">
