@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (score <= 4) {
             badgeHtml = '<div style="margin: 1rem 0; padding: 1rem; background: rgba(11, 61, 145, 0.1); border: 1px solid var(--primary-blue); border-radius: var(--radius-md);"><h3 style="color: var(--primary-blue);">🌟 Aware Citizen</h3><p>Great job! You know your stuff.</p></div>';
         } else {
-            badgeHtml = '<div style="margin: 1rem 0; padding: 1rem; background: rgba(19, 136, 8, 0.1); border: 1px solid var(--success-green); border-radius: var(--radius-md);"><h3 style="color: var(--success-green);">🏆 Pro Voter</h3><p>Perfect score! You are a highly responsible citizen.</p></div>';
+            badgeHtml = '<div style="margin: 1rem 0; padding: 1rem; background: rgba(19, 136, 8, 0.1); border: 1px solid var(--success-green); border-radius: var(--radius-md);"><h3 style="color: var(--success-green);">Responsible Voter ✅</h3><p>Perfect score! You are a highly responsible citizen.</p></div>';
         }
         
         let correctHtml = '<h4>Correct Answers:</h4><ul style="margin-bottom: 1rem; list-style: none; padding:0;">';

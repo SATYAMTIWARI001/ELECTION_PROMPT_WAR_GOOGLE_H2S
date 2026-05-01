@@ -30,40 +30,20 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="hero-section">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        
-        <div class="container hero-grid">
-            <div class="hero-content fade-in-up">
-                <div class="trust-badge">✓ Verified Official Information Source</div>
-                <h1 class="fade-in-up delay-1">Your Smart Guide to Voting 🇮🇳</h1>
-                <p class="fade-in-up delay-2">Understand elections and vote with confidence using AI</p>
-                <div class="hero-actions fade-in-up delay-3">
-                    <a href="chat.html" class="btn btn-primary">Start Chat</a>
-                    <a href="quiz.html" class="btn btn-secondary">Take Quiz</a>
-                </div>
-            </div>
-            <div class="hero-illustration fade-in-up delay-2">
-                <div class="phone-mockup float">
-                    <div class="phone-notch"></div>
-                    <div class="phone-screen">
-                        <div class="phone-icon">🏛️</div>
-                        <div class="phone-text">JanVote AI</div>
-                        <p style="text-align: center; font-size: 0.9rem; color: #666; margin-top: 1rem;">Ready to assist you.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- User Dashboard (Hidden by default, shown when logged in) -->
-    <section id="user-dashboard" class="dashboard-section bg-light fade-in-up" style="display: none; padding: 4rem 0;">
+    <!-- Main Dashboard -->
+    <section id="user-dashboard" class="dashboard-section fade-in-up" style="padding: 2rem 0;">
         <div class="container">
-            <div class="section-header">
-                <h2 id="dashboard-welcome">Welcome, User</h2>
-                <p>Track your personal voting readiness journey.</p>
+            <div class="section-header" style="margin-bottom: 1.5rem; text-align: left;">
+                <h2 id="dashboard-welcome">Welcome, User 👋</h2>
+                <p>Your personalized civic dashboard.</p>
+            </div>
+
+            <!-- Quick Action Bar -->
+            <div class="quick-action-bar" style="display: flex; gap: 1rem; margin-bottom: 2rem; overflow-x: auto; padding-bottom: 0.5rem;">
+                <button class="btn btn-primary small ai-service-trigger" data-service="eligibility">Check Eligibility</button>
+                <button class="btn btn-outline small ai-service-trigger" data-service="register">Register to Vote</button>
+                <button class="btn btn-outline small ai-service-trigger" data-service="booth">Find Polling Booth</button>
+                <a href="chat.html" class="btn btn-outline small">Ask AI 💬</a>
             </div>
             
             <div class="dashboard-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
@@ -142,52 +122,96 @@
             </div>
         </div>
     </section>
-    <!-- Feature Cards -->
-    <section class="steps-section bg-light">
+    <!-- Government Service Grid (ECINet Inspired) -->
+    <section class="services-section" style="padding: 2rem 0;">
         <div class="container">
-            <div class="section-header center fade-in-up">
-                <h2>How Elections Work</h2>
-                <p>Explore our features to stay informed.</p>
-            </div>
-            
-            <div class="cards-grid">
+            <h2 style="margin-bottom: 1.5rem;">Government Services</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
                 <!-- Card 1 -->
-                <div class="step-card glass-card fade-in-up delay-1">
-                    <div class="card-icon">📝</div>
+                <div class="glass-card" style="padding: 1.5rem;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">📝</div>
                     <h3>Register to Vote</h3>
-                    <p>Register online through official government portals or offline at designated centers.</p>
-                    <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem;">
-                        <a href="chat.html" class="btn btn-outline small">Ask AI</a>
-                        <a href="https://voters.eci.gov.in/" class="btn btn-primary small gov-link">Official Portal 🔗</a>
-                    </div>
+                    <p style="font-size: 0.9rem; color: #555; margin-bottom: 1rem;">Apply for a new Voter ID online.</p>
+                    <button class="btn btn-primary small ai-service-trigger" style="width: 100%;" data-service="register" data-url="https://voters.eci.gov.in/">Apply Now</button>
                 </div>
                 <!-- Card 2 -->
-                <div class="step-card glass-card fade-in-up delay-2">
-                    <div class="card-icon">📅</div>
-                    <h3>Election Timeline</h3>
-                    <p>Track the phases from announcement to voting day, and the final results.</p>
-                    <a href="timeline.html" class="btn btn-outline small">View Timeline</a>
+                <div class="glass-card" style="padding: 1.5rem;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">🔎</div>
+                    <h3>Check Voter Status</h3>
+                    <p style="font-size: 0.9rem; color: #555; margin-bottom: 1rem;">Search your name in the electoral roll.</p>
+                    <button class="btn btn-outline small ai-service-trigger" style="width: 100%;" data-service="status" data-url="https://electoralsearch.eci.gov.in/">Search Name</button>
                 </div>
                 <!-- Card 3 -->
-                <div class="step-card glass-card fade-in-up delay-3">
-                    <div class="card-icon">📍</div>
-                    <h3>Find Polling Booth</h3>
-                    <p>Locate your designated polling station well before election day.</p>
-                    <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem;">
-                        <a href="chat.html" class="btn btn-outline small">Ask AI</a>
-                        <a href="https://electoralsearch.eci.gov.in/" class="btn btn-primary small gov-link">Search Booth 🔗</a>
-                    </div>
+                <div class="glass-card" style="padding: 1.5rem;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">✏️</div>
+                    <h3>Update Details</h3>
+                    <p style="font-size: 0.9rem; color: #555; margin-bottom: 1rem;">Shift residence or correct entries.</p>
+                    <button class="btn btn-outline small ai-service-trigger" style="width: 100%;" data-service="update" data-url="https://voters.eci.gov.in/">Update</button>
                 </div>
                 <!-- Card 4 -->
-                <div class="step-card glass-card fade-in-up delay-3">
-                    <div class="card-icon">🧠</div>
-                    <h3>Take Quiz</h3>
-                    <p>Test your knowledge about the democratic process and voting rules.</p>
-                    <a href="quiz.html" class="btn btn-outline small">Go to Quiz</a>
+                <div class="glass-card" style="padding: 1.5rem;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">📍</div>
+                    <h3>Find Polling Booth</h3>
+                    <p style="font-size: 0.9rem; color: #555; margin-bottom: 1rem;">Know your designated voting location.</p>
+                    <button class="btn btn-outline small ai-service-trigger" style="width: 100%;" data-service="booth" data-url="https://electoralsearch.eci.gov.in/">Find Booth</button>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Election Insights (IndiaVotes Inspired) & Constituency -->
+    <section class="insights-section" style="padding: 2rem 0; background: rgba(255,255,255,0.4);">
+        <div class="container">
+            <h2 style="margin-bottom: 1.5rem;">Election Insights</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                <div class="glass-card" style="padding: 1.5rem; text-align: center; border-top: 4px solid var(--primary-blue);">
+                    <h4 style="color: #666; font-size: 0.9rem;">National Voter Turnout</h4>
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">67.4%</div>
+                    <p style="font-size: 0.8rem; color: var(--success-green);">↑ 1.2% from 2019</p>
+                </div>
+                <div class="glass-card" style="padding: 1.5rem; text-align: center; border-top: 4px solid var(--accent-saffron);">
+                    <h4 style="color: #666; font-size: 0.9rem;">Upcoming Election</h4>
+                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-main);">General 2026</div>
+                    <p style="font-size: 0.8rem; color: #555;">543 Constituencies</p>
+                </div>
+            </div>
+
+            <div class="glass-card" style="padding: 2rem;">
+                <h3>Constituency Info Widget</h3>
+                <p style="font-size: 0.9rem; color: #555; margin-bottom: 1rem;">Enter your PIN code to see mock local info.</p>
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                    <input type="text" id="pin-input" placeholder="Enter PIN code (e.g. 110001)" style="padding: 0.8rem; border-radius: 50px; border: 1px solid #ccc; flex: 1;">
+                    <button class="btn btn-primary" id="pin-search-btn">Search</button>
+                </div>
+                <div id="constituency-result" style="display: none; padding: 1.5rem; background: rgba(11, 61, 145, 0.05); border-radius: var(--radius-md);">
+                    <h4 style="color: var(--primary-blue);" id="mock-const-name">New Delhi (Mock)</h4>
+                    <p style="margin-bottom: 0.5rem;"><strong>Current Representative:</strong> <span id="mock-rep">Mock MP Name</span></p>
+                    <p><strong>Nearest Booth:</strong> <span id="mock-booth">Govt School, Sector 4</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Service Action Modal -->
+    <div id="ai-service-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 500px;">
+            <button id="service-modal-close" class="modal-close">&times;</button>
+            <div class="section-header" style="text-align: left; margin-bottom: 1rem;">
+                <h2 id="service-modal-title" style="font-size: 1.5rem;">Service Explanation</h2>
+            </div>
+            
+            <div id="service-modal-loading" style="display: none; text-align: center; padding: 2rem;">
+                <p>🧠 AI is analyzing the process...</p>
+            </div>
+
+            <div id="service-modal-body" style="font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem;">
+                <!-- AI Explanation injects here -->
+            </div>
+
+            <a href="#" id="service-modal-action-btn" class="btn btn-primary gov-link" style="width: 100%; display: none; text-align: center;">Go to Official Website 🔗</a>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer>

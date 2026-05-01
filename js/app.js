@@ -12,23 +12,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Check LocalStorage on Load
     function checkProfile() {
         const storedName = localStorage.getItem('username');
+        
         if (storedName) {
             if (loginBtn) loginBtn.parentElement.style.display = 'none';
             if (userProfileContainer) {
                 userProfileContainer.style.display = 'inline-block';
                 userProfileText.innerText = `👤 ${storedName}`;
             }
+        }
 
-            // Show Dashboard on index.html
-            const dashboard = document.getElementById('user-dashboard');
-            const hero = document.querySelector('header');
-            const welcome = document.getElementById('dashboard-welcome');
-            if (dashboard && hero) {
-                hero.style.display = 'none';
-                dashboard.style.display = 'block';
-                if (welcome) welcome.innerText = `Welcome, ${storedName} 👋`;
-                initDashboard();
+        // Initialize Dashboard on index.html regardless of login status
+        const dashboard = document.getElementById('user-dashboard');
+        const welcome = document.getElementById('dashboard-welcome');
+        if (dashboard) {
+            if (storedName && welcome) {
+                welcome.innerText = `Welcome, ${storedName} 👋`;
             }
+            initDashboard();
         }
     }
 
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (e) => {
         // Find if click was on or inside a gov-link
         const govLink = e.target.closest('.gov-link');
-        if (govLink) {
+        if (govLink && !govLink.id.includes('service-modal')) {
             e.preventDefault();
             const href = govLink.getAttribute('href');
             if (href && href !== '#') {
@@ -184,4 +184,99 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+
+    // 6. AI Service Action Modal Logic
+    const serviceTriggers = document.querySelectorAll('.ai-service-trigger');
+    const serviceModal = document.getElementById('ai-service-modal');
+    const serviceClose = document.getElementById('service-modal-close');
+    const serviceTitle = document.getElementById('service-modal-title');
+    const serviceBody = document.getElementById('service-modal-body');
+    const serviceActionBtn = document.getElementById('service-modal-action-btn');
+    const serviceLoading = document.getElementById('service-modal-loading');
+
+    const serviceData = {
+        'eligibility': {
+            title: 'Check Eligibility',
+            url: 'https://voters.eci.gov.in/',
+            body: `<strong>How it works:</strong><br>You must be an Indian citizen, 18 years or older as of the qualifying date, and ordinarily resident of the polling area.<br><br><strong>Steps:</strong><ul><li>Keep your Date of Birth proof ready.</li><li>Check the official ECI portal for age cutoffs.</li></ul><br>💡 <em>Tip: You can apply in advance if you are turning 18 soon!</em>`
+        },
+        'register': {
+            title: 'Register to Vote',
+            url: 'https://voters.eci.gov.in/',
+            body: `<strong>How it works:</strong><br>Form 6 is used to register a new voter. You can file it entirely online.<br><br><strong>Steps:</strong><ul><li>Go to the portal and create an account.</li><li>Fill out Form 6.</li><li>Upload your photo and address proof.</li></ul><br>💡 <em>Tip: Keep scanned copies of Aadhaar/Passport ready (under 2MB).</em>`
+        },
+        'booth': {
+            title: 'Find Polling Booth',
+            url: 'https://electoralsearch.eci.gov.in/',
+            body: `<strong>How it works:</strong><br>Your polling booth is assigned based on the address you provided during registration.<br><br><strong>Steps:</strong><ul><li>Enter your EPIC (Voter ID) number.</li><li>Or search by your personal details.</li><li>The portal will show your exact Part Number and Booth Name.</li></ul><br>💡 <em>Tip: Screenshot your booth slip before leaving home!</em>`
+        },
+        'status': {
+            title: 'Check Voter Status',
+            url: 'https://electoralsearch.eci.gov.in/',
+            body: `<strong>How it works:</strong><br>It takes a few weeks to process a new application. You can track it online.<br><br><strong>Steps:</strong><ul><li>Use the Reference ID provided during registration.</li><li>Enter it in the tracking portal.</li></ul><br>💡 <em>Tip: If it says 'Accepted', you can download the e-EPIC immediately.</em>`
+        },
+        'update': {
+            title: 'Update Details',
+            url: 'https://voters.eci.gov.in/',
+            body: `<strong>How it works:</strong><br>Form 8 is used for shifting residence, correcting entries, or replacing a lost EPIC.<br><br><strong>Steps:</strong><ul><li>Login to the portal.</li><li>Select Form 8.</li><li>Submit the required proof for the change.</li></ul><br>💡 <em>Tip: Updating mobile numbers is essential for downloading e-EPIC!</em>`
+        }
+    };
+
+    if (serviceModal && serviceTriggers.length > 0) {
+        serviceTriggers.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const serviceKey = btn.getAttribute('data-service');
+                const data = serviceData[serviceKey];
+                
+                if (data) {
+                    serviceTitle.innerText = data.title;
+                    serviceBody.style.display = 'none';
+                    serviceActionBtn.style.display = 'none';
+                    serviceLoading.style.display = 'block';
+                    
+                    serviceActionBtn.setAttribute('href', data.url);
+                    
+                    serviceModal.classList.add('active');
+
+                    // Mock AI delay
+                    setTimeout(() => {
+                        serviceLoading.style.display = 'none';
+                        serviceBody.innerHTML = data.body;
+                        serviceBody.style.display = 'block';
+                        serviceActionBtn.style.display = 'block';
+                    }, 800);
+                }
+            });
+        });
+
+        if (serviceClose) {
+            serviceClose.addEventListener('click', () => {
+                serviceModal.classList.remove('active');
+            });
+        }
+        
+        serviceActionBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const href = serviceActionBtn.getAttribute('href');
+            if (confirm("You are being redirected to an official government website. Do you want to continue?")) {
+                window.open(href, '_blank');
+                serviceModal.classList.remove('active');
+            }
+        });
+    }
+
+    // 7. Mock Constituency PIN Search
+    const pinBtn = document.getElementById('pin-search-btn');
+    const pinInput = document.getElementById('pin-input');
+    const constResult = document.getElementById('constituency-result');
+    if (pinBtn && pinInput && constResult) {
+        pinBtn.addEventListener('click', () => {
+            if (pinInput.value.length > 3) {
+                constResult.style.display = 'block';
+            } else {
+                alert("Please enter a valid PIN code.");
+            }
+        });
+    }
 });

@@ -66,16 +66,18 @@ document.addEventListener('DOMContentLoaded', () => {
 - DO NOT say things like: "Let me check..." or "Here is an example..."
 - Give real, useful answers immediately
 
-📌 RESPONSE STYLE:
-Answer:
-[short direct answer]
+📌 STRICT RESPONSE FORMAT:
+You MUST format EVERY response exactly like this, no exceptions:
 
-Steps:
-- Step 1
-- Step 2
+**Answer:**
+[Short direct answer here]
 
-Tip:
-[optional helpful tip]
+**Steps:**
+- [Actionable step 1]
+- [Actionable step 2]
+
+**Tip:**
+💡 [One single helpful tip]
 
 📚 CORE FEATURES YOU MUST SUPPORT:
 1. Voter registration guidance
