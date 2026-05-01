@@ -38,11 +38,7 @@
     <!-- Page 2: Chat Section (Full Screen Layout) -->
     <section class="chat-section-fullscreen fade-in-up">
         <div class="chat-interface-fullscreen">
-            <div style="padding: 1rem; text-align: center; border-bottom: 1px solid #eee; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px);">
-                <label style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: var(--primary-blue);">
-                    <input type="checkbox" id="explain-simply-toggle" style="width: 18px; height: 18px;"> 🧠 Explain Simply Mode
-                </label>
-            </div>
+            <!-- Explain Simply Mode removed as all answers are now strictly simple by default -->
             <div class="chat-window" id="chat-window">
                 <div class="chat-empty-state" id="chat-empty-state" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; opacity: 0.5; user-select: none;">
                     <div style="font-size: 4rem; margin-bottom: 1rem;">🏛️</div>
@@ -52,11 +48,11 @@
             
             <div class="chat-bottom-wrapper">
                 <div class="suggested-prompts" id="suggested-prompts" style="display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem;">
-                    <button class="prompt-chip">How to register?</button>
-                    <button class="prompt-chip">Check voter list</button>
-                    <button class="prompt-chip">What is NOTA?</button>
-                    <button class="prompt-chip">Lost voter ID</button>
-                    <button class="prompt-chip">First time voting</button>
+                    <button class="prompt-chip">What is voting</button>
+                    <button class="prompt-chip">Who can vote</button>
+                    <button class="prompt-chip">What is EVM</button>
+                    <button class="prompt-chip">What is NOTA</button>
+                    <button class="prompt-chip">Required documents</button>
                 </div>
                 <div class="chat-input-area glass-card">
                     <button id="mic-btn" class="btn btn-outline" style="padding: 0.8rem; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">🎙️</button>
