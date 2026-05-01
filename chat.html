@@ -50,67 +50,18 @@
                 </div>
             </div>
             
-            <div class="chat-bottom-wrapper" style="background: white; border-top: 1px solid #eee; padding: 1rem; max-height: 40vh; overflow-y: auto;">
-                <h4 style="margin-bottom: 1rem; font-size: 1rem; color: #333; text-align: center;">Choose a question:</h4>
-                
-                <div class="category-section" style="margin-bottom: 1.5rem;">
-                    <h5 style="margin-bottom: 0.5rem; color: var(--primary-blue); font-size: 0.9rem;">Registration</h5>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <button class="prompt-chip">How do I register to vote?</button>
-                        <button class="prompt-chip">What is the voter registration deadline?</button>
-                        <button class="prompt-chip">Am I eligible to vote?</button>
-                        <button class="prompt-chip">Can I register online?</button>
-                        <button class="prompt-chip">Can I vote if I moved recently?</button>
-                    </div>
+            <div class="chat-bottom-wrapper">
+                <div class="suggested-prompts" id="suggested-prompts" style="display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem;">
+                    <button class="prompt-chip">How to register?</button>
+                    <button class="prompt-chip">Check voter list</button>
+                    <button class="prompt-chip">What is NOTA?</button>
+                    <button class="prompt-chip">Lost voter ID</button>
+                    <button class="prompt-chip">First time voting</button>
                 </div>
-                
-                <div class="category-section" style="margin-bottom: 1.5rem;">
-                    <h5 style="margin-bottom: 0.5rem; color: var(--primary-blue); font-size: 0.9rem;">Voting Process</h5>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <button class="prompt-chip">What ID do I need to vote?</button>
-                        <button class="prompt-chip">Where do I go to vote?</button>
-                        <button class="prompt-chip">What time do polls open and close?</button>
-                        <button class="prompt-chip">What happens on election day?</button>
-                        <button class="prompt-chip">How do I cast my vote?</button>
-                        <button class="prompt-chip">What is early voting?</button>
-                        <button class="prompt-chip">What is mail-in voting?</button>
-                        <button class="prompt-chip">What if I make a mistake on my ballot?</button>
-                        <button class="prompt-chip">What is a polling station?</button>
-                        <button class="prompt-chip">What is absentee voting?</button>
-                        <button class="prompt-chip">What is a ballot?</button>
-                    </div>
-                </div>
-                
-                <div class="category-section" style="margin-bottom: 1.5rem;">
-                    <h5 style="margin-bottom: 0.5rem; color: var(--primary-blue); font-size: 0.9rem;">Election Results & Rules</h5>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <button class="prompt-chip">How are votes counted?</button>
-                        <button class="prompt-chip">When are results announced?</button>
-                        <button class="prompt-chip">What is a recount?</button>
-                    </div>
-                </div>
-                
-                <div class="category-section" style="margin-bottom: 1.5rem;">
-                    <h5 style="margin-bottom: 0.5rem; color: var(--primary-blue); font-size: 0.9rem;">Government & System</h5>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <button class="prompt-chip">What is the electoral college?</button>
-                        <button class="prompt-chip">What is a primary election?</button>
-                        <button class="prompt-chip">What is Congress?</button>
-                        <button class="prompt-chip">How long is a presidential term?</button>
-                        <button class="prompt-chip">How does the president get elected?</button>
-                        <button class="prompt-chip">What is a swing state?</button>
-                        <button class="prompt-chip">When is election day in the US?</button>
-                    </div>
-                </div>
-
-                <div class="category-section">
-                    <h5 style="margin-bottom: 0.5rem; color: var(--primary-blue); font-size: 0.9rem;">General</h5>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <button class="prompt-chip">Why is voting important?</button>
-                        <button class="prompt-chip">What is voter suppression?</button>
-                        <button class="prompt-chip">How many people vote in US elections?</button>
-                        <button class="prompt-chip">What happens after the election?</button>
-                    </div>
+                <div class="chat-input-area glass-card">
+                    <button id="mic-btn" class="btn btn-outline" style="padding: 0.8rem; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">🎙️</button>
+                    <input type="text" id="chat-input" placeholder="Ask anything about voting..." style="flex: 1;">
+                    <button id="send-btn" class="btn btn-primary">Send</button>
                 </div>
             </div>
         </div>
