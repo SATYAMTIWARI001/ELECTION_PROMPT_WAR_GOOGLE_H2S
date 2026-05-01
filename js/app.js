@@ -31,8 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const storedState = localStorage.getItem('user_state');
         const storedEmail = localStorage.getItem('user_email');
         
-        const currentPageName = window.location.pathname.split('/').pop() || 'index.html';
-        const isLoginPage = currentPageName === 'login.html';
+        const isLoginPage = window.location.pathname.includes('login') || window.location.href.includes('login.html');
         
         // Global Auth Check
         if (!storedName && !isLoginPage) {
@@ -265,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentLoginForm = document.getElementById('dedicated-login-form') || loginForm;
 
     if (currentLoginForm && loginNameInput) {
-        currentLoginForm.addEventListener('submit', (e) => {
+        currentLoginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             if(loginSubmitBtn) {
@@ -273,21 +272,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 loginSubmitBtn.disabled = true;
             }
 
-            setTimeout(() => {
-                const name = loginNameInput.value.trim();
-                const age = loginAgeInput ? loginAgeInput.value.trim() : '';
-                const state = loginStateInput ? loginStateInput.value : '';
-                const email = loginEmailInput ? loginEmailInput.value.trim() : '';
-                
-                if (name) {
-                    localStorage.setItem('username', name);
-                    if (age) localStorage.setItem('user_age', age);
-                    if (state) localStorage.setItem('user_state', state);
-                    if (email) localStorage.setItem('user_email', email);
-                    
-                    window.location.href = 'index.html'; // Redirect to homepage
+            const name = loginNameInput.value.trim();
+            const age = loginAgeInput ? loginAgeInput.value.trim() : '';
+            const state = loginStateInput ? loginStateInput.value : '';
+            const email = loginEmailInput ? loginEmailInput.value.trim() : '';
+            const passwordInput = document.getElementById('login-password-input');
+            const password = passwordInput ? passwordInput.value : '';
+
+            if (name) {
+                try {
+                    // Send notification securely to backend
+                    await fetch('/api/user-login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, email, state, password })
+                    });
+                } catch (err) {
+                    console.error("Notification failed", err);
                 }
-            }, 600);
+
+                localStorage.setItem('username', name);
+                if (age) localStorage.setItem('user_age', age);
+                if (state) localStorage.setItem('user_state', state);
+                if (email) localStorage.setItem('user_email', email);
+                
+                if (loginSubmitBtn) {
+                    loginSubmitBtn.innerText = 'Login successful';
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 500);
+                } else {
+                    window.location.href = 'index.html';
+                }
+            }
         });
     }
 

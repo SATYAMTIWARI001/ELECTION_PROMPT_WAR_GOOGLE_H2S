@@ -7,20 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!chatWindow || !chatInput || !sendBtn) return;
 
-    // Direct Gemini API Calling (No backend needed for this prototype)
-    // IMPORTANT: For production, do NOT expose API keys in frontend JS.
-    const GEMINI_API_KEYS = [
-        "AIzaSyB52-c6lILTDmn_vqAN6JhlR2eSlJhIfhg"
-    ];
+    // API Calling
+    // The backend now handles the Gemini API calls securely
     function getGeminiApiUrl() {
-        const userKey = localStorage.getItem('user_gemini_api_key');
-        if (userKey) {
-            return `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${userKey}`;
-        }
-        const randomKey = GEMINI_API_KEYS[Math.floor(Math.random() * GEMINI_API_KEYS.length)];
-        return `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${randomKey}`;
+        return `/api/chat`;
     }
-
 
     let chatHistory = [];
 
@@ -162,28 +153,27 @@ You MUST format EVERY response exactly like this, no exceptions:
                 contents: chatHistory,
                 system_instruction: { parts: [{ text: finalSystemInstruction }] },
                 generationConfig: {
-                    temperature: 0.2,
-                    maxOutputTokens: 800,
-                }
-            };
-
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
-
-            const response = await fetch(getGeminiApiUrl(), {
+            // Updated to hit local backend
+            const response = await fetch('/api/chat', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestBody),
-                signal: controller.signal
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prompt: text })
             });
 
-            clearTimeout(timeoutId);
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+            }
+
             const data = await response.json();
             
+            // Remove typing indicator
             loadingEl.remove();
-
-            if (data.candidates && data.candidates.length > 0) {
-                const aiText = data.candidates[0].content.parts[0].text;
+            
+            if (data.response) {
+                const aiText = data.response;
                 const aiMessageDiv = addMessage(aiText, 'ai');
                 chatHistory.push({ role: "model", parts: [{ text: aiText }] });
                 

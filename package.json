@@ -4,8 +4,8 @@
   "description": "Interactive Election Process Assistant",
   "main": "app.js",
   "scripts": {
-    "dev": "npx serve .",
-    "start": "npx serve ."
+    "dev": "node server.js",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",

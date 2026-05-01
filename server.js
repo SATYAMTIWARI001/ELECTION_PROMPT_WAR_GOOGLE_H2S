@@ -3,14 +3,16 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-
+const bcrypt = require('bcrypt');
+const { sendNotification } = require('./emailService');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files from the root directory
+app.use(express.static(path.join(__dirname)));
 
 // Initialize Gemini AI
 // Initialize conditionally in case key isn't provided yet
@@ -61,6 +63,44 @@ app.post('/api/chat', async (req, res) => {
     } catch (error) {
         console.error('Error calling Gemini API:', error);
         res.status(500).json({ error: 'Failed to generate response. Please try again later.' });
+    }
+});
+// Auth and Notification Endpoint
+app.post('/api/user-login', async (req, res) => {
+    try {
+        const { name, email, state, password } = req.body;
+        
+        // Securely hash password if it was provided
+        let passwordHash = null;
+        if (password) {
+            const saltRounds = 10;
+            passwordHash = await bcrypt.hash(password, saltRounds);
+            // In a real application, you would store this hash in a database
+            // e.g., db.users.create({ name, email, state, passwordHash })
+        }
+
+        const timestamp = new Date().toLocaleString();
+        
+        // Construct SAFE email body (NO PASSWORDS)
+        const subject = "New User Activity - JanVote AI";
+        const body = `
+New activity on JanVote AI!
+
+Name: ${name || 'Unknown'}
+Email: ${email || 'Not provided'}
+State: ${state || 'Not provided'}
+Time: ${timestamp}
+
+[Note: Passwords are never sent via email or stored in plaintext for security reasons.]
+`;
+        
+        // Send email notification in the background
+        sendNotification(subject, body);
+
+        res.json({ message: 'Login successful', success: true });
+    } catch (error) {
+        console.error('Error in /api/user-login:', error);
+        res.status(500).json({ error: 'Internal server error during authentication' });
     }
 });
 
