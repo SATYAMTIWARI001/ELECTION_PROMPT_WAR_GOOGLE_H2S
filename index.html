@@ -30,6 +30,39 @@
         </div>
     </nav>
 
+    <!-- Hero Section -->
+    <header class="hero-section" style="padding: 4rem 0 2rem 0; overflow: hidden; position: relative;">
+        <!-- decorative background blobs if desired -->
+        <div style="position: absolute; top: -50px; right: -50px; width: 300px; height: 300px; background: rgba(11, 61, 145, 0.05); border-radius: 50%; filter: blur(50px); z-index: 0;"></div>
+        
+        <div class="container hero-grid" style="position: relative; z-index: 1;">
+            <!-- LEFT SIDE -->
+            <div class="hero-content fade-in-up">
+                <h1 style="font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 1rem; color: var(--primary-blue);">JanVote AI 🇮🇳</h1>
+                <p style="font-size: 1.25rem; color: #555; margin-bottom: 2rem;">Smart guidance for every voter</p>
+                <div class="hero-actions" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a href="chat.html" class="btn btn-primary">Start Chat</a>
+                    <a href="quiz.html" class="btn btn-outline">Take Quiz</a>
+                </div>
+            </div>
+            
+            <!-- RIGHT SIDE -->
+            <div class="hero-illustration fade-in-up delay-2">
+                <!-- Wrapper to handle 60% scaling while keeping the float animation intact -->
+                <div class="phone-wrapper" style="transform: scale(0.6); transform-origin: center; filter: drop-shadow(0 20px 30px rgba(11, 61, 145, 0.15));">
+                    <div class="phone-mockup float">
+                        <div class="phone-notch"></div>
+                        <div class="phone-screen">
+                            <div class="phone-icon" style="font-size: 4rem; margin-top: 4rem; text-align: center;">🏛️</div>
+                            <div class="phone-text" style="font-size: 2rem; font-weight: bold; text-align: center; color: var(--primary-blue); margin-top: 1rem;">JanVote AI</div>
+                            <p style="text-align: center; font-size: 1.1rem; color: #666; margin-top: 1rem;">Ready to assist you.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
     <!-- Main Dashboard -->
     <section id="user-dashboard" class="dashboard-section fade-in-up" style="padding: 2rem 0;">
         <div class="container">
