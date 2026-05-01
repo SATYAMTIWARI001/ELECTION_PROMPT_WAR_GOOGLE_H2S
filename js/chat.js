@@ -108,13 +108,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function findAnswer(query) {
         const lowerQuery = query.toLowerCase().trim();
+
+        // 1. Exact match first
         for (let item of qaDatabase) {
-            // Check exact or loose match
-            if (lowerQuery === item.question.toLowerCase() || item.question.toLowerCase().includes(lowerQuery) || lowerQuery.includes(item.question.toLowerCase().replace('?',''))) {
+            if (lowerQuery === item.question.toLowerCase().replace('?', '').trim()) {
                 return item;
             }
         }
-        return null;
+
+        // 2. Score-based keyword match to avoid greedy false positives
+        const queryWords = lowerQuery.replace(/[?]/g, '').split(/\s+/).filter(w => w.length > 2);
+        let bestMatch = null;
+        let bestScore = 0;
+
+        for (let item of qaDatabase) {
+            const itemWords = item.question.toLowerCase().replace(/[?]/g, '').split(/\s+/);
+            let score = 0;
+            for (let word of queryWords) {
+                if (itemWords.includes(word)) score++;
+            }
+            // Require at least 2 keyword hits OR full query is contained in question
+            if (score > bestScore && (score >= 2 || item.question.toLowerCase().includes(lowerQuery))) {
+                bestScore = score;
+                bestMatch = item;
+            }
+        }
+
+        return bestMatch;
     }
 
     function sendMessage(text) {

@@ -440,8 +440,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. Set Active Nav Link based on current URL
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    const navLinks = document.querySelectorAll('.nav-links a');
-    const mobileLinks = document.querySelectorAll('.mobile-bottom-nav a');
+    const allNavLinks = document.querySelectorAll('.nav-links a');
+    const allMobileLinks = document.querySelectorAll('.mobile-bottom-nav a');
 
     function setActiveLinks(links) {
         links.forEach(link => {
@@ -453,8 +453,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    setActiveLinks(navLinks);
-    setActiveLinks(mobileLinks);
+    setActiveLinks(allNavLinks);
+    setActiveLinks(allMobileLinks);
 
     // 5. Global Gov-Link Interceptor
     document.addEventListener('click', (e) => {
