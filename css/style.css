@@ -819,16 +819,41 @@ footer {
     font-size: 1.25rem;
 }
 
+/* Tablet Responsive */
+@media (max-width: 1024px) {
+    .container { padding: 0 1rem; }
+    .hero-grid { gap: 2rem; }
+    .phone-mockup { transform: scale(0.8); transform-origin: top; }
+    .quick-stats { grid-template-columns: repeat(2, 1fr); }
+    .login-left { padding: 2rem; }
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
     body { padding-bottom: 60px; /* Space for bottom nav */ }
-    .hero-grid { grid-template-columns: 1fr; text-align: center; }
+    .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 1.5rem; }
     .hero-actions { justify-content: center; }
     .nav-links { display: none; }
     .mobile-bottom-nav { display: flex; }
-    h1 { font-size: 2rem; }
+    h1 { font-size: 2.2rem; }
     .chat-message { max-width: 95%; }
-    .phone-wrapper { transform: scale(0.45) !important; margin-top: -5rem; margin-bottom: -5rem; }
+    .phone-wrapper { transform: scale(0.6) !important; margin-top: -2rem; margin-bottom: -3rem; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .dashboard-grid { grid-template-columns: 1fr; }
+    .timeline-container::before { left: 15px; }
+    .timeline-item { padding-left: 45px; }
+    .timeline-marker { width: 30px; height: 30px; font-size: 0.8rem; }
+}
+
+/* Small Mobile Responsive */
+@media (max-width: 480px) {
+    .quick-stats { grid-template-columns: 1fr; }
+    h1 { font-size: 1.8rem; }
+    .phone-wrapper { transform: scale(0.5) !important; }
+    .login-card { padding: 2rem 1.5rem; }
+    .chat-window { padding: 1rem; }
+    .hero-section { padding: 3rem 0; }
+    .steps-section, .about-section, .quiz-section { padding: 2rem 0; }
 }
 
 /* Modal Styling */

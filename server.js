@@ -70,11 +70,11 @@ If you are reading this, your Nodemailer setup and Gmail App Password are correc
 });
 
 // Start Server
-let currentPort = process.env.PORT || 5175;
+let currentPort = process.env.PORT || 8080;
 
 const startServer = (port) => {
     const server = app.listen(port, () => {
-        console.log(`\n✅ JanVote AI Server successfully running on http://localhost:${port}\n`);
+        console.log(`\n✅ JanVote AI Server successfully running on http://localhost:${port}\n   → To test on your phone, find your Mac's IP address in System Preferences > Network, and visit http://YOUR_IP_ADDRESS:${port}\n`);
     }).on('error', (err) => {
         if (err.code === 'EADDRINUSE') {
             console.log(`⚠️ Port ${port} is already in use by another terminal. Trying port ${port + 1}...`);
