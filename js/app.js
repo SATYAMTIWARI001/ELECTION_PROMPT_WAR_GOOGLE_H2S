@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const storedName = localStorage.getItem('username');
         const storedAge = localStorage.getItem('user_age');
         const storedState = localStorage.getItem('user_state');
+        const storedEmail = localStorage.getItem('user_email');
         
         if (storedName) {
             if (loginBtn) loginBtn.parentElement.style.display = 'none';
@@ -49,17 +50,47 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             // Populate View Mode
+            const displayEmail = document.getElementById('display-email');
             if (displayName) displayName.innerText = storedName;
             if (displayAge) displayAge.innerText = storedAge || 'Not specified';
             if (displayState) displayState.innerText = storedState || 'Not specified';
+            if (displayEmail) displayEmail.innerText = storedEmail || 'Not specified';
+            
+            // Profile Completion Logic
+            const hasDocs = localStorage.getItem('user_docs') && JSON.parse(localStorage.getItem('user_docs')).some(Boolean);
+            const completionItems = [
+                { name: 'Name', completed: !!storedName },
+                { name: 'Age', completed: !!storedAge },
+                { name: 'State', completed: !!storedState },
+                { name: 'Email', completed: !!storedEmail },
+                { name: 'Documents', completed: !!hasDocs }
+            ];
+            
+            const completedCount = completionItems.filter(item => item.completed).length;
+            const completionPercent = Math.round((completedCount / completionItems.length) * 100);
+            
+            const completionText = document.getElementById('profile-completion-text');
+            const completionBar = document.getElementById('profile-completion-bar');
+            const completionList = document.getElementById('profile-completion-list');
+            
+            if (completionText) completionText.innerText = `Profile ${completionPercent}% complete`;
+            if (completionBar) completionBar.style.width = `${completionPercent}%`;
+            
+            if (completionList) {
+                completionList.innerHTML = completionItems.map(item => 
+                    `<li style="margin-bottom: 0.25rem;">${item.completed ? '<span style="color:var(--success-green);">✔</span>' : '<span style="color:var(--danger-red);">❌</span>'} ${item.name}</li>`
+                ).join('');
+            }
             
             // Populate Edit Mode inputs with current values
             const editNameInput = document.getElementById('edit-name-input');
             const editAgeInput = document.getElementById('edit-age-input');
             const editStateInput = document.getElementById('edit-state-input');
+            const editEmailInput = document.getElementById('edit-email-input');
             if(editNameInput) editNameInput.value = storedName;
             if(editAgeInput) editAgeInput.value = storedAge || '';
             if(editStateInput && storedState) editStateInput.value = storedState;
+            if(editEmailInput) editEmailInput.value = storedEmail || '';
         } else {
             if (loginBtn) loginBtn.parentElement.style.display = 'inline-block';
             if (userProfileContainer) userProfileContainer.style.display = 'none';
@@ -173,6 +204,8 @@ document.addEventListener('DOMContentLoaded', () => {
         loginBtn.addEventListener('click', (e) => {
             e.preventDefault();
             loginModal.classList.add('active');
+            const firstInput = document.getElementById('login-name-input');
+            if(firstInput) setTimeout(() => firstInput.focus(), 100);
         });
 
         loginClose.addEventListener('click', () => {
@@ -202,6 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
             editProfileBtn.addEventListener('click', () => {
                 profileViewMode.style.display = 'none';
                 profileEditMode.style.display = 'block';
+                const firstEditInput = document.getElementById('edit-name-input');
+                if(firstEditInput) setTimeout(() => firstEditInput.focus(), 100);
             });
             cancelEditBtn.addEventListener('click', () => {
                 profileEditMode.style.display = 'none';
@@ -211,20 +246,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 3. Handle Login Submit
+    const loginNameInput = document.getElementById('login-name-input');
     const loginAgeInput = document.getElementById('login-age-input');
     const loginStateInput = document.getElementById('login-state-input');
+    const loginEmailInput = document.getElementById('login-email-input');
+    const loginSubmitBtn = document.getElementById('login-submit-btn');
+
     if (loginForm && loginNameInput) {
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const name = loginNameInput.value.trim();
-            const age = loginAgeInput ? loginAgeInput.value.trim() : '';
-            const state = loginStateInput ? loginStateInput.value : '';
-            if (name) {
-                localStorage.setItem('username', name);
-                if (age) localStorage.setItem('user_age', age);
-                if (state) localStorage.setItem('user_state', state);
-                window.location.href = 'index.html'; // Redirect to homepage
+            
+            if(loginSubmitBtn) {
+                loginSubmitBtn.innerText = 'Saving...';
+                loginSubmitBtn.disabled = true;
             }
+
+            setTimeout(() => {
+                const name = loginNameInput.value.trim();
+                const age = loginAgeInput ? loginAgeInput.value.trim() : '';
+                const state = loginStateInput ? loginStateInput.value : '';
+                const email = loginEmailInput ? loginEmailInput.value.trim() : '';
+                
+                if (name) {
+                    localStorage.setItem('username', name);
+                    if (age) localStorage.setItem('user_age', age);
+                    if (state) localStorage.setItem('user_state', state);
+                    if (email) localStorage.setItem('user_email', email);
+                    
+                    window.location.href = 'index.html'; // Redirect to homepage
+                }
+            }, 600);
         });
     }
 
@@ -232,24 +283,41 @@ document.addEventListener('DOMContentLoaded', () => {
     if (profileEditMode) {
         profileEditMode.addEventListener('submit', (e) => {
             e.preventDefault();
-            const editNameInput = document.getElementById('edit-name-input');
-            const editAgeInput = document.getElementById('edit-age-input');
-            const editStateInput = document.getElementById('edit-state-input');
             
-            const name = editNameInput.value.trim();
-            const age = editAgeInput.value.trim();
-            const state = editStateInput.value;
-            
-            if (name) {
-                localStorage.setItem('username', name);
-                localStorage.setItem('user_age', age);
-                localStorage.setItem('user_state', state);
-                
-                // Update UI Instantly
-                checkProfile();
-                profileEditMode.style.display = 'none';
-                profileViewMode.style.display = 'block';
+            const editSubmitBtn = document.getElementById('edit-submit-btn');
+            if(editSubmitBtn) {
+                editSubmitBtn.innerText = 'Saving...';
+                editSubmitBtn.disabled = true;
             }
+
+            setTimeout(() => {
+                const editNameInput = document.getElementById('edit-name-input');
+                const editAgeInput = document.getElementById('edit-age-input');
+                const editStateInput = document.getElementById('edit-state-input');
+                const editEmailInput = document.getElementById('edit-email-input');
+                
+                const name = editNameInput.value.trim();
+                const age = editAgeInput.value.trim();
+                const state = editStateInput.value;
+                const email = editEmailInput ? editEmailInput.value.trim() : '';
+                
+                if (name) {
+                    localStorage.setItem('username', name);
+                    localStorage.setItem('user_age', age);
+                    localStorage.setItem('user_state', state);
+                    localStorage.setItem('user_email', email);
+                    
+                    // Update UI Instantly
+                    checkProfile();
+                    profileEditMode.style.display = 'none';
+                    profileViewMode.style.display = 'block';
+                    
+                    if(editSubmitBtn) {
+                        editSubmitBtn.innerText = 'Save Changes';
+                        editSubmitBtn.disabled = false;
+                    }
+                }
+            }, 600);
         });
     }
 
@@ -259,6 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem('username');
             localStorage.removeItem('user_age');
             localStorage.removeItem('user_state');
+            localStorage.removeItem('user_email');
             localStorage.removeItem('readiness_state');
             localStorage.removeItem('user_docs');
             window.location.href = 'index.html';
@@ -300,6 +369,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dashboard) {
             initDashboard();
         }
+        
+        // Refresh profile UI completion score
+        checkProfile();
     }
 
     if (allDocs[0]) {
