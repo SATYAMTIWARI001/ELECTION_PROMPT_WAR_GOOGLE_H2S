@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JanVote AI - Timeline</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Leaflet CSS for Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Sticky Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">🏛️</span>
+                <span class="logo-text">JanVote AI</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="chat.html">Chat</a></li>
+                <li><a href="timeline.html">Timeline</a></li>
+                <li><a href="quiz.html">Quiz</a></li>
+                <li><a href="about.html">About</a></li>
+                <li id="user-profile-container" style="display:none;"><span id="user-profile" style="font-weight: 600; color: var(--primary-blue);"></span></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page 3: Timeline Section -->
+    <section class="timeline-section fade-in-up">
+        <div class="container">
+            <div class="section-header">
+                <h2>Election Timeline</h2>
+                <p>Track the current phase of the election cycle.</p>
+                <div class="glass-card mt-2" style="display: inline-block; padding: 1rem 2rem; background: rgba(11, 61, 145, 0.1); border: 1px solid var(--primary-blue);">
+                    <h3 style="color: var(--primary-blue); font-size: 1.5rem; margin-bottom: 0.5rem;">⏳ Voting Starts In</h3>
+                    <div style="font-size: 2rem; font-weight: 700; font-family: monospace;">12 Days</div>
+                    <button class="btn btn-primary mt-1" onclick="addToCalendar('Election Day Reminder', '2026-01-25')">🔔 Remind me to vote</button>
+                </div>
+            </div>
+            
+            <div class="timeline-container">
+                <!-- Step 1 -->
+                <div class="timeline-item completed">
+                    <div class="timeline-marker">1</div>
+                    <div class="timeline-content glass-card">
+                        <h3>Voter Registration</h3>
+                        <p class="timeline-date"><strong>1 Jan 2026</strong></p>
+                        <p>Citizens register to vote and update their voter information on the electoral roll.</p>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                            <button class="btn btn-outline small mt-2" onclick="addToCalendar('Voter Registration', '2026-01-01')">📅 Add to Calendar</button>
+                            <a href="https://voters.eci.gov.in/" class="btn btn-primary small mt-2 gov-link">Register Online 🔗</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Step 2 -->
+                <div class="timeline-item active">
+                    <div class="timeline-marker">2</div>
+                    <div class="timeline-content glass-card">
+                        <h3>Verification of Details</h3>
+                        <p class="timeline-date"><strong>5 Jan 2026</strong></p>
+                        <p>Authorities verify the electoral rolls and publish the final list of eligible voters.</p>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                            <button class="btn btn-outline small mt-2" onclick="addToCalendar('Verification', '2026-01-05')">📅 Add to Calendar</button>
+                            <a href="https://electoralsearch.eci.gov.in/" class="btn btn-primary small mt-2 gov-link">Check Status 🔗</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="timeline-item">
+                    <div class="timeline-marker">3</div>
+                    <div class="timeline-content glass-card">
+                        <h3>Campaign Period</h3>
+                        <p class="timeline-date"><strong>10–20 Jan 2026</strong></p>
+                        <p>Candidates and political parties present their manifestos and campaign to the public.</p>
+                        <button class="btn btn-outline small mt-2" onclick="addToCalendar('Campaign Period', '2026-01-10')">📅 Add to Calendar</button>
+                    </div>
+                </div>
+                <!-- Step 4 -->
+                <div class="timeline-item">
+                    <div class="timeline-marker">4</div>
+                    <div class="timeline-content glass-card">
+                        <h3>Voting Day</h3>
+                        <p class="timeline-date"><strong>25 Jan 2026</strong></p>
+                        <p>The official day polls are open. Citizens cast their votes at designated booths.</p>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                            <button class="btn btn-primary small mt-2" onclick="addToCalendar('Voting Day', '2026-01-25')">📅 Add to Calendar</button>
+                            <a href="https://electoralsearch.eci.gov.in/" class="btn btn-outline small mt-2 gov-link">Find Booth 🔗</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Step 5 -->
+                <div class="timeline-item">
+                    <div class="timeline-marker">5</div>
+                    <div class="timeline-content glass-card">
+                        <h3>Result Declaration</h3>
+                        <p class="timeline-date"><strong>30 Jan 2026</strong></p>
+                        <p>Votes are officially counted under strict supervision and final results are declared.</p>
+                        <button class="btn btn-outline small mt-2" onclick="addToCalendar('Result Declaration', '2026-01-30')">📅 Add to Calendar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page 3 Continues: Map Section -->
+    <section class="map-section bg-light" style="padding-bottom: 4rem;">
+        <div class="container">
+            <div class="section-header center fade-in-up delay-1">
+                <h2>Find Your Polling Station</h2>
+                <p>Locate your voting area on the map.</p>
+            </div>
+            
+            <div class="polling-interface glass-card fade-in-up delay-2">
+                <div class="search-box" style="background: transparent; border-bottom: 1px solid #ddd;">
+                    <input type="text" id="map-search-input" placeholder="Search your area..." style="border: 1px solid #ccc; padding: 0.8rem; border-radius: var(--radius-sm); flex: 1;">
+                    <button id="map-search-btn" class="btn btn-primary">Search Map</button>
+                </div>
+                <div class="map-container" id="timeline-map" style="height: 300px; border-radius: 0; overflow: hidden;">
+                    <!-- Leaflet map injects here -->
+                </div>
+                <div id="map-result" style="display: none; padding: 1.5rem; background: var(--secondary-white); border-top: 1px solid #ddd; text-align: center; border-radius: 0 0 var(--radius-lg) var(--radius-lg);">
+                    <h3 style="color: var(--primary-blue); margin-bottom: 0.5rem;" id="booth-name">Nearest Polling Booth</h3>
+                    <p style="font-weight: 600; color: #555;" id="booth-distance">Distance: 0 km</p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">📍 <span id="booth-address">...</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-logo">
+                <span class="logo-icon">🏛️</span> JanVote AI
+            </div>
+            <div class="footer-disclaimer">
+                <p><strong>Disclaimer:</strong> This tool is for educational purposes only and does not represent any political party or agenda. Information provided is based on official election protocols but should be verified with your local election commission.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav">
+        <a href="index.html"><span class="icon">🏠</span> Home</a>
+        <a href="chat.html"><span class="icon">💬</span> Chat</a>
+        <a href="timeline.html"><span class="icon">📅</span> Timeline</a>
+        <a href="quiz.html"><span class="icon">🧠</span> Quiz</a>
+    </nav>
+
+
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/calendar.js"></script>
+    <script src="js/map.js"></script>
+</body>
+</html>

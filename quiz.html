@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JanVote AI - Quiz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Sticky Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">🏛️</span>
+                <span class="logo-text">JanVote AI</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="chat.html">Chat</a></li>
+                <li><a href="timeline.html">Timeline</a></li>
+                <li><a href="quiz.html">Quiz</a></li>
+                <li><a href="about.html">About</a></li>
+                
+                <li id="user-profile-container" style="display:none;"><span id="user-profile" style="font-weight: 600; color: var(--primary-blue);"></span></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page 4: Quiz Mode -->
+    <section class="quiz-section fade-in-up">
+        <div class="container">
+            <div class="section-header center">
+                <h2>Test Your Knowledge</h2>
+                <p>Take a quick 5-question quiz to see how much you know about elections.</p>
+            </div>
+            
+            <div class="quiz-card glass-card" id="quiz-container">
+                <div id="quiz-start">
+                    <h3>Ready to begin?</h3>
+                    <button id="start-quiz-btn" class="btn btn-primary mt-2">Start Quiz</button>
+                </div>
+                <div id="quiz-question" class="hidden">
+                    <div id="quiz-progress" class="quiz-progress">Question 1/5</div>
+                    <h3 id="question-text">Question text here</h3>
+                    <div class="options-grid" id="options-grid">
+                        <!-- Options injected via JS -->
+                    </div>
+                </div>
+                <div id="quiz-results" class="hidden">
+                    <h3>Here’s your result 🎉</h3>
+                    <div class="score-circle"><span id="score-display">0</span>/5</div>
+                    <div id="detailed-feedback" style="text-align: left; margin-top: 2rem;"></div>
+                    <button id="restart-quiz-btn" class="btn btn-primary mt-2">Retry Quiz</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-logo">
+                <span class="logo-icon">🏛️</span> JanVote AI
+            </div>
+            <div class="footer-disclaimer">
+                <p><strong>Disclaimer:</strong> This tool is for educational purposes only and does not represent any political party or agenda. Information provided is based on official election protocols but should be verified with your local election commission.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav">
+        <a href="index.html"><span class="icon">🏠</span> Home</a>
+        <a href="chat.html"><span class="icon">💬</span> Chat</a>
+        <a href="timeline.html"><span class="icon">📅</span> Timeline</a>
+        <a href="quiz.html"><span class="icon">🧠</span> Quiz</a>
+    </nav>
+
+    <script src="js/app.js"></script>
+    <script src="js/quiz.js"></script>
+</body>
+</html>
