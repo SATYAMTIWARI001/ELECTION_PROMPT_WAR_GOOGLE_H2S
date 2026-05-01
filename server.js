@@ -6,7 +6,7 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 const bcrypt = require('bcrypt');
 const { sendNotification } = require('./emailService');
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 
 // Middleware
 app.use(cors());
@@ -105,6 +105,6 @@ Time: ${timestamp}
 });
 
 // Start Server
-app.listen(PORT, () => {
-    console.log(`JanVote AI Server running on http://localhost:${PORT}`);
+app.listen(process.env.PORT || 5174, () => {
+    console.log(`JanVote AI Server running on http://localhost:${process.env.PORT || 5174}`);
 });
