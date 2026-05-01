@@ -10,11 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Direct Gemini API Calling (No backend needed for this prototype)
     // IMPORTANT: For production, do NOT expose API keys in frontend JS.
     const GEMINI_API_KEYS = [
-        "AIzaSyAWnlwxygi0SlNUyfeIRa-7L_vG1S-prmk",
-        "AIzaSyDJOX0uUUUfQQs36OQcU89NhBq7th7c48k",
-        "AIzaSyA_LmeibTt2-RtzWX79toRmUwyl0JN0b0Y"
+        "AIzaSyB52-c6lILTDmn_vqAN6JhlR2eSlJhIfhg"
     ];
     function getGeminiApiUrl() {
+        const userKey = localStorage.getItem('user_gemini_api_key');
+        if (userKey) {
+            return `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${userKey}`;
+        }
         const randomKey = GEMINI_API_KEYS[Math.floor(Math.random() * GEMINI_API_KEYS.length)];
         return `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${randomKey}`;
     }
@@ -46,6 +48,40 @@ document.addEventListener('DOMContentLoaded', () => {
         chatWindow.appendChild(messageDiv);
         chatWindow.scrollTop = chatWindow.scrollHeight;
         return messageDiv;
+    }
+
+    function promptForApiKey(errorMsg) {
+        const aiMessageDiv = addMessage(`⚠️ Oops! The API request failed. (${errorMsg})\\n\\nIt seems the default API key has reached its limit or is invalid. Please enter your own Google Gemini API key to continue chatting.`, 'ai');
+        
+        const keyPromptBox = document.createElement('div');
+        keyPromptBox.style.marginTop = '1rem';
+        keyPromptBox.style.padding = '1rem';
+        keyPromptBox.style.background = 'rgba(255, 255, 255, 0.8)';
+        keyPromptBox.style.borderRadius = 'var(--radius-md)';
+        keyPromptBox.style.border = '1px solid #ccc';
+        
+        keyPromptBox.innerHTML = `
+            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; font-weight: 600;">Enter your Gemini API Key:</p>
+            <div style="display: flex; gap: 0.5rem;">
+                <input type="password" id="custom-api-key-input" placeholder="AIzaSy..." style="flex: 1; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                <button id="save-custom-key-btn" class="btn btn-primary small">Save Key</button>
+            </div>
+            <p style="font-size: 0.75rem; color: #666; margin-top: 0.5rem;">Your key is stored securely in your browser's local storage and is only used to connect directly to Google's API.</p>
+        `;
+        
+        aiMessageDiv.appendChild(keyPromptBox);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+        
+        const saveBtn = keyPromptBox.querySelector('#save-custom-key-btn');
+        const inputField = keyPromptBox.querySelector('#custom-api-key-input');
+        
+        saveBtn.addEventListener('click', () => {
+            const key = inputField.value.trim();
+            if (key) {
+                localStorage.setItem('user_gemini_api_key', key);
+                keyPromptBox.innerHTML = '<p style="color: var(--success-green); font-weight: 600;">✅ API Key saved! You can now send your message again.</p>';
+            }
+        });
     }
 
     const systemInstruction = `You are JanVote AI, an intelligent assistant that helps users understand the election process in a simple, interactive, and step-by-step way.
@@ -183,14 +219,14 @@ You MUST format EVERY response exactly like this, no exceptions:
                 
                 chatWindow.scrollTop = chatWindow.scrollHeight;
             } else {
-                addMessage(`Error: ${data.error ? data.error.message : 'Unknown error'}`, 'ai');
+                promptForApiKey(data.error ? data.error.message : 'Unknown error');
             }
         } catch (err) {
             loadingEl.remove();
             if (err.name === 'AbortError') {
-                addMessage('Error: Request timed out. Try again.', 'ai');
+                promptForApiKey('Request timed out');
             } else {
-                addMessage('Error: Try again', 'ai');
+                promptForApiKey('Network Error');
             }
         }
     }

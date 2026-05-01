@@ -255,6 +255,7 @@
             <div class="footer-disclaimer">
                 <p><strong>Disclaimer:</strong> This platform provides guidance. For official actions, you will be redirected to government websites.</p>
                 <p style="margin-top: 0.5rem; font-size: 0.85rem;">This tool is for educational purposes only and does not represent any political party or agenda. Information provided is based on official election protocols but should be verified with your local election commission.</p>
+                <p style="margin-top: 1.5rem; font-size: 0.85rem; font-weight: 600; color: #ffffff; text-align: center; opacity: 0.9; letter-spacing: 1px; text-transform: uppercase;">Made by SATYAM</p>
             </div>
         </div>
     </footer>
@@ -273,13 +274,78 @@
             <button id="modal-close" class="modal-close">&times;</button>
             <div class="section-header center" style="margin-bottom: 1.5rem;">
                 <h2>Welcome</h2>
-                <p>Enter your name to continue</p>
+                <p>Create your civic profile</p>
             </div>
             
             <form id="login-form" class="modal-form active">
-                <input type="text" id="login-name-input" placeholder="Your Full Name" required>
+                <input type="text" id="login-name-input" placeholder="Your Full Name" required style="margin-bottom: 1rem; width: 100%; padding: 0.8rem; border-radius: var(--radius-sm); border: 1px solid #ccc;">
+                <input type="number" id="login-age-input" placeholder="Your Age" required min="18" max="120" style="margin-bottom: 1rem; width: 100%; padding: 0.8rem; border-radius: var(--radius-sm); border: 1px solid #ccc;">
+                <select id="login-state-input" required style="margin-bottom: 1.5rem; width: 100%; padding: 0.8rem; border-radius: var(--radius-sm); border: 1px solid #ccc;">
+                    <option value="">Select your state...</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="Other">Other</option>
+                </select>
                 <button type="submit" class="btn btn-primary" style="width: 100%;">Continue</button>
             </form>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 500px;">
+            <button id="profile-modal-close" class="modal-close">&times;</button>
+            <div class="section-header center" style="margin-bottom: 1rem;">
+                <h2>Your Civic Profile</h2>
+            </div>
+            
+            <!-- View Mode -->
+            <div id="profile-view-mode">
+                <div style="background: rgba(11, 61, 145, 0.05); padding: 1.5rem; border-radius: var(--radius-md); margin-bottom: 1.5rem;">
+                    <p style="margin-bottom: 0.5rem;"><strong>Name:</strong> <span id="display-name"></span></p>
+                    <p style="margin-bottom: 0.5rem;"><strong>Age:</strong> <span id="display-age"></span></p>
+                    <p style="margin-bottom: 0.5rem;"><strong>State:</strong> <span id="display-state"></span></p>
+                </div>
+                <button id="edit-profile-btn" class="btn btn-outline small" style="width: 100%; margin-bottom: 1.5rem;">Edit Profile</button>
+            </div>
+
+            <!-- Edit Mode -->
+            <form id="profile-edit-mode" style="display: none; margin-bottom: 1.5rem;">
+                <input type="text" id="edit-name-input" placeholder="Full Name" required style="margin-bottom: 1rem; width: 100%; padding: 0.8rem; border-radius: var(--radius-sm); border: 1px solid #ccc;">
+                <input type="number" id="edit-age-input" placeholder="Age" required min="18" max="120" style="margin-bottom: 1rem; width: 100%; padding: 0.8rem; border-radius: var(--radius-sm); border: 1px solid #ccc;">
+                <select id="edit-state-input" required style="margin-bottom: 1rem; width: 100%; padding: 0.8rem; border-radius: var(--radius-sm); border: 1px solid #ccc;">
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="Other">Other</option>
+                </select>
+                <div style="display: flex; gap: 1rem;">
+                    <button type="button" id="cancel-edit-btn" class="btn btn-outline" style="flex: 1;">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Save Changes</button>
+                </div>
+            </form>
+
+            <!-- Document Status System -->
+            <div style="border-top: 1px solid #eee; padding-top: 1.5rem; margin-bottom: 1.5rem;">
+                <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Your Documents</h3>
+                <div class="checklist">
+                    <label style="display: flex; gap: 10px; margin-bottom: 0.5rem; cursor: pointer; align-items: center;">
+                        <input type="checkbox" id="doc-aadhaar-cb" style="width: 18px; height: 18px;"> Aadhaar Card
+                    </label>
+                    <label style="display: flex; gap: 10px; margin-bottom: 0.5rem; cursor: pointer; align-items: center;">
+                        <input type="checkbox" id="doc-pan-cb" style="width: 18px; height: 18px;"> PAN Card
+                    </label>
+                    <label style="display: flex; gap: 10px; margin-bottom: 0.5rem; cursor: pointer; align-items: center;">
+                        <input type="checkbox" id="doc-voterid-cb" style="width: 18px; height: 18px;"> Voter ID (EPIC)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Logout -->
+            <button id="logout-btn" class="btn btn-outline" style="width: 100%; border-color: var(--danger-red); color: var(--danger-red);">Logout</button>
         </div>
     </div>
 

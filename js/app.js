@@ -4,21 +4,65 @@ document.addEventListener('DOMContentLoaded', () => {
     const userProfileContainer = document.getElementById('user-profile-container');
     const userProfileText = document.getElementById('user-profile');
     
-    const modalOverlay = document.getElementById('login-modal');
-    const modalClose = document.getElementById('modal-close');
+    const loginModal = document.getElementById('login-modal');
+    const loginClose = document.getElementById('modal-close');
     const loginForm = document.getElementById('login-form');
-    const loginNameInput = document.getElementById('login-name-input');
+    
+    // Profile Modal Nodes
+    const profileModal = document.getElementById('profile-modal');
+    const profileClose = document.getElementById('profile-modal-close');
+    const profileViewMode = document.getElementById('profile-view-mode');
+    const profileEditMode = document.getElementById('profile-edit-mode');
+    
+    // Display Nodes
+    const displayName = document.getElementById('display-name');
+    const displayAge = document.getElementById('display-age');
+    const displayState = document.getElementById('display-state');
+    
+    // Edit Nodes
+    const editProfileBtn = document.getElementById('edit-profile-btn');
+    const cancelEditBtn = document.getElementById('cancel-edit-btn');
+    const logoutBtn = document.getElementById('logout-btn');
 
     // 1. Check LocalStorage on Load
     function checkProfile() {
         const storedName = localStorage.getItem('username');
+        const storedAge = localStorage.getItem('user_age');
+        const storedState = localStorage.getItem('user_state');
         
         if (storedName) {
             if (loginBtn) loginBtn.parentElement.style.display = 'none';
             if (userProfileContainer) {
                 userProfileContainer.style.display = 'inline-block';
                 userProfileText.innerText = `👤 ${storedName}`;
+                // Set click handler to open Profile Modal
+                userProfileContainer.style.cursor = 'pointer';
+                userProfileContainer.onclick = () => {
+                    if (profileModal) {
+                        profileModal.classList.add('active');
+                        profileViewMode.style.display = 'block';
+                        profileEditMode.style.display = 'none';
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                };
             }
+            
+            // Populate View Mode
+            if (displayName) displayName.innerText = storedName;
+            if (displayAge) displayAge.innerText = storedAge || 'Not specified';
+            if (displayState) displayState.innerText = storedState || 'Not specified';
+            
+            // Populate Edit Mode inputs with current values
+            const editNameInput = document.getElementById('edit-name-input');
+            const editAgeInput = document.getElementById('edit-age-input');
+            const editStateInput = document.getElementById('edit-state-input');
+            if(editNameInput) editNameInput.value = storedName;
+            if(editAgeInput) editAgeInput.value = storedAge || '';
+            if(editStateInput && storedState) editStateInput.value = storedState;
+        } else {
+            if (loginBtn) loginBtn.parentElement.style.display = 'inline-block';
+            if (userProfileContainer) userProfileContainer.style.display = 'none';
         }
 
         // Initialize Dashboard on index.html regardless of login status
@@ -27,6 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dashboard) {
             if (storedName && welcome) {
                 welcome.innerText = `Welcome, ${storedName} 👋`;
+            } else if (welcome) {
+                welcome.innerText = `Welcome, Guest 👋`;
             }
             initDashboard();
         }
@@ -123,32 +169,143 @@ document.addEventListener('DOMContentLoaded', () => {
     checkProfile();
 
     // 2. Open / Close Modal
-    if (loginBtn && modalOverlay && modalClose) {
+    if (loginBtn && loginModal && loginClose) {
         loginBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            modalOverlay.classList.add('active');
+            loginModal.classList.add('active');
         });
 
-        modalClose.addEventListener('click', () => {
-            modalOverlay.classList.remove('active');
+        loginClose.addEventListener('click', () => {
+            loginModal.classList.remove('active');
         });
 
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) {
-                modalOverlay.classList.remove('active');
+        loginModal.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                loginModal.classList.remove('active');
             }
         });
     }
 
+    if (profileModal && profileClose) {
+        profileClose.addEventListener('click', () => {
+            profileModal.classList.remove('active');
+        });
+
+        profileModal.addEventListener('click', (e) => {
+            if (e.target === profileModal) {
+                profileModal.classList.remove('active');
+            }
+        });
+        
+        // Edit Profile Toggle
+        if (editProfileBtn && cancelEditBtn) {
+            editProfileBtn.addEventListener('click', () => {
+                profileViewMode.style.display = 'none';
+                profileEditMode.style.display = 'block';
+            });
+            cancelEditBtn.addEventListener('click', () => {
+                profileEditMode.style.display = 'none';
+                profileViewMode.style.display = 'block';
+            });
+        }
+    }
+
     // 3. Handle Login Submit
+    const loginAgeInput = document.getElementById('login-age-input');
+    const loginStateInput = document.getElementById('login-state-input');
     if (loginForm && loginNameInput) {
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const name = loginNameInput.value.trim();
+            const age = loginAgeInput ? loginAgeInput.value.trim() : '';
+            const state = loginStateInput ? loginStateInput.value : '';
             if (name) {
                 localStorage.setItem('username', name);
+                if (age) localStorage.setItem('user_age', age);
+                if (state) localStorage.setItem('user_state', state);
                 window.location.href = 'index.html'; // Redirect to homepage
             }
+        });
+    }
+
+    // 4. Handle Edit Profile Submit
+    if (profileEditMode) {
+        profileEditMode.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const editNameInput = document.getElementById('edit-name-input');
+            const editAgeInput = document.getElementById('edit-age-input');
+            const editStateInput = document.getElementById('edit-state-input');
+            
+            const name = editNameInput.value.trim();
+            const age = editAgeInput.value.trim();
+            const state = editStateInput.value;
+            
+            if (name) {
+                localStorage.setItem('username', name);
+                localStorage.setItem('user_age', age);
+                localStorage.setItem('user_state', state);
+                
+                // Update UI Instantly
+                checkProfile();
+                profileEditMode.style.display = 'none';
+                profileViewMode.style.display = 'block';
+            }
+        });
+    }
+
+    // 5. Handle Logout
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('username');
+            localStorage.removeItem('user_age');
+            localStorage.removeItem('user_state');
+            localStorage.removeItem('readiness_state');
+            localStorage.removeItem('user_docs');
+            window.location.href = 'index.html';
+        });
+    }
+
+    // 6. Handle Document Status Syncing
+    const docAadhaar = document.getElementById('doc-aadhaar-cb');
+    const docPan = document.getElementById('doc-pan-cb');
+    const docVoterId = document.getElementById('doc-voterid-cb');
+    const allDocs = [docAadhaar, docPan, docVoterId];
+    
+    function loadDocs() {
+        const savedDocs = JSON.parse(localStorage.getItem('user_docs'));
+        if (savedDocs && allDocs[0]) {
+            allDocs.forEach((cb, idx) => {
+                if(cb) cb.checked = savedDocs[idx];
+            });
+        }
+    }
+    
+    function saveDocs() {
+        if (!allDocs[0]) return;
+        const state = allDocs.map(cb => cb.checked);
+        localStorage.setItem('user_docs', JSON.stringify(state));
+        
+        // Connect Document Status to Dashboard Readiness Score!
+        const readinessSavedState = JSON.parse(localStorage.getItem('readiness_state')) || [false, false, false];
+        // If Voter ID is checked in docs, automatically check the "Do you have a Voter ID?" (index 1) in readiness score.
+        if (docVoterId && docVoterId.checked) {
+            readinessSavedState[1] = true;
+        } else {
+            readinessSavedState[1] = false;
+        }
+        localStorage.setItem('readiness_state', JSON.stringify(readinessSavedState));
+        
+        // Re-init dashboard to show new score if we are on index
+        const dashboard = document.getElementById('user-dashboard');
+        if (dashboard) {
+            initDashboard();
+        }
+    }
+
+    if (allDocs[0]) {
+        loadDocs();
+        allDocs.forEach(cb => {
+            if(cb) cb.addEventListener('change', saveDocs);
         });
     }
 

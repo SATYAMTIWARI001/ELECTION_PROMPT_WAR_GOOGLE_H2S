@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Only run if we are on the quiz page
     if (!startQuizBtn) return;
 
-    const questions = [
+    const allQuestions = [
         {
             question: "What is the minimum age required to vote in India?",
             options: ["16", "18", "21", "25"],
@@ -44,12 +44,111 @@ document.addEventListener('DOMContentLoaded', () => {
             options: ["The Prime Minister", "The Supreme Court", "Election Commission of India", "The President"],
             correct: 2,
             explanation: "The Election Commission of India (ECI) is an autonomous constitutional authority responsible for administering election processes."
+        },
+        {
+            question: "When is National Voters' Day celebrated in India?",
+            options: ["January 25", "August 15", "January 26", "October 2"],
+            correct: 0,
+            explanation: "National Voters' Day is celebrated on January 25 every year to mark the foundation day of the Election Commission of India."
+        },
+        {
+            question: "What is the maximum number of candidates an EVM can cater to (including NOTA)?",
+            options: ["16", "64", "384", "None of these"],
+            correct: 2,
+            explanation: "A single EVM can cater to a maximum of 384 candidates, using 24 ballot units connected together."
+        },
+        {
+            question: "What ink is used to mark a voter's finger during elections in India?",
+            options: ["Permanent marker", "Silver nitrate ink", "Iodine solution", "Invisible ink"],
+            correct: 1,
+            explanation: "Indelible ink containing silver nitrate is used to mark a voter's finger to prevent multiple voting."
+        },
+        {
+            question: "VVPAT stands for:",
+            options: ["Voter Verifiable Paper Audit Trail", "Voting Validation Paper Audit Trail", "Voter Verification Process and Tracking", "Valid Voter Print And Track"],
+            correct: 0,
+            explanation: "VVPAT provides a paper slip to the voter confirming that their vote has been correctly recorded for the intended candidate."
+        },
+        {
+            question: "Which form is used for applying for a new Voter ID card in India?",
+            options: ["Form 6", "Form 7", "Form 8", "Form 9"],
+            correct: 0,
+            explanation: "Form 6 is the application form for the inclusion of a name in the electoral roll for first-time voters."
+        },
+        {
+            question: "Can an NRI (Non-Resident Indian) vote in Indian elections?",
+            options: ["No, never", "Yes, but only via postal ballot", "Yes, by being physically present at their polling booth", "Yes, through internet voting"],
+            correct: 2,
+            explanation: "NRIs can vote in Indian elections, but they must be physically present at their designated polling station."
+        },
+        {
+            question: "What is the Model Code of Conduct (MCC)?",
+            options: ["A law passed by Parliament", "Guidelines issued by ECI for political parties and candidates", "Rules for voters to follow at the booth", "The procedure for counting votes"],
+            correct: 1,
+            explanation: "The MCC is a set of guidelines issued by the Election Commission of India to regulate political parties and candidates prior to elections."
+        },
+        {
+            question: "How long does a voter get to see the VVPAT slip through the glass window before it falls?",
+            options: ["3 seconds", "7 seconds", "10 seconds", "Until the next voter comes"],
+            correct: 1,
+            explanation: "The VVPAT slip is visible through a transparent window for about 7 seconds before it automatically cuts and falls into a sealed drop box."
+        },
+        {
+            question: "Which form is used for correction of entries in the Electoral Roll?",
+            options: ["Form 6", "Form 7", "Form 8", "Form 8A"],
+            correct: 2,
+            explanation: "Form 8 is used by voters to request corrections to their existing details (name, age, photo, etc.) in the electoral roll."
+        },
+        {
+            question: "Who was the first Chief Election Commissioner of India?",
+            options: ["T.N. Seshan", "Sukumar Sen", "Sunil Arora", "Rajiv Kumar"],
+            correct: 1,
+            explanation: "Sukumar Sen served as the first Chief Election Commissioner of India from 1950 to 1958."
+        },
+        {
+            question: "Is voting compulsory by law in India?",
+            options: ["Yes, for everyone", "Yes, for government employees", "No, it is a right but not a legal duty", "Yes, but only in national elections"],
+            correct: 2,
+            explanation: "While highly encouraged as a civic responsibility, voting is not legally compulsory in India."
+        },
+        {
+            question: "What does 'EPIC' stand for?",
+            options: ["Election Photo Identity Card", "Electoral Photo Identity Card", "Electronic Polling Identity Card", "Election Process Identification Card"],
+            correct: 1,
+            explanation: "EPIC stands for Electoral Photo Identity Card, commonly known as the Voter ID card."
+        },
+        {
+            question: "Which of these groups can currently use the Postal Ballot facility?",
+            options: ["All citizens living away from home", "Armed forces personnel and specific government officials on election duty", "Students studying in other states", "Anyone who applies online"],
+            correct: 1,
+            explanation: "Postal ballots are restricted to specific groups like armed forces, personnel on election duty, and in some cases, senior citizens (80+) and PwD voters."
+        },
+        {
+            question: "Can a person who is confined in prison vote in India?",
+            options: ["Yes", "No", "Only for state elections", "Only if serving a sentence of less than 1 year"],
+            correct: 1,
+            explanation: "Under the Representation of the People Act, a person confined in a prison (under sentence or otherwise) is not entitled to vote."
+        },
+        {
+            question: "How are EVMs powered?",
+            options: ["Direct electricity from the grid", "Solar panels", "In-built battery packs", "Generators provided at the booth"],
+            correct: 2,
+            explanation: "EVMs run on standard power packs (batteries) provided by the Election Commission, ensuring they work even in areas without electricity."
         }
     ];
 
+    let questions = [];
     let currentQuestion = 0;
     let score = 0;
     let userAnswers = [];
+
+    function initializeQuiz() {
+        const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
+        questions = shuffled.slice(0, 5);
+        currentQuestion = 0;
+        score = 0;
+        userAnswers = [];
+    }
 
     function loadQuestion() {
         optionsGrid.innerHTML = '';
@@ -157,9 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
     startQuizBtn.addEventListener('click', () => {
         quizStart.classList.add('hidden');
         quizQuestion.classList.remove('hidden');
-        currentQuestion = 0;
-        score = 0;
-        userAnswers = [];
+        initializeQuiz();
         loadQuestion();
     });
 
