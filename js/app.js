@@ -299,10 +299,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (loginSubmitBtn) {
                     loginSubmitBtn.innerText = 'Login successful';
                     setTimeout(() => {
-                        window.location.href = 'index.html';
+                        window.location.href = 'dashboard.html';
                     }, 500);
                 } else {
-                    window.location.href = 'index.html';
+                    window.location.href = 'dashboard.html';
                 }
             }
         });

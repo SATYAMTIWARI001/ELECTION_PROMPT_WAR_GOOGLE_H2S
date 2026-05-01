@@ -104,7 +104,35 @@ Time: ${timestamp}
     }
 });
 
-// Start Server
-app.listen(process.env.PORT || 5174, () => {
-    console.log(`JanVote AI Server running on http://localhost:${process.env.PORT || 5174}`);
+// Test Email Route
+app.get('/api/test-email', async (req, res) => {
+    try {
+        const body = `This is a test notification from the /api/test-email route.
+        
+If you are reading this, your Nodemailer setup and Gmail App Password are correct!`;
+        
+        await sendNotification("🗳️ JanVote AI - Test Notification", body);
+        res.send("✅ Test email sent successfully! Please check your Gmail inbox.");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("❌ Email failed. Please check your server logs and .env file.");
+    }
 });
+
+// Start Server
+let currentPort = process.env.PORT || 5175;
+
+const startServer = (port) => {
+    const server = app.listen(port, () => {
+        console.log(`\n✅ JanVote AI Server successfully running on http://localhost:${port}\n`);
+    }).on('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+            console.log(`⚠️ Port ${port} is already in use by another terminal. Trying port ${port + 1}...`);
+            startServer(port + 1);
+        } else {
+            console.error('Server error:', err);
+        }
+    });
+};
+
+startServer(currentPort);

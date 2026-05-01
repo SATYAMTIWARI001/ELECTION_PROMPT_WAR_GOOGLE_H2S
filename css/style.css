@@ -1186,3 +1186,114 @@ footer {
     }
 }
 
+/* ==========================================================================
+   Animated Phone Mockup (Login Page)
+   ========================================================================== */
+.phone-mockup {
+    position: relative;
+    width: 280px;
+    height: 560px;
+    background: #000;
+    border-radius: 40px;
+    border: 8px solid #222;
+    margin-top: 2rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4), inset 0 0 10px rgba(255,255,255,0.2);
+    animation: floatPhone 6s ease-in-out infinite;
+    overflow: hidden;
+}
+
+@keyframes floatPhone {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); box-shadow: 0 35px 50px rgba(0,0,0,0.3), inset 0 0 10px rgba(255,255,255,0.2); }
+}
+
+.phone-notch {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 25px;
+    background: #222;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    z-index: 100;
+}
+
+.phone-glare {
+    position: absolute;
+    top: 0;
+    right: -50%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%);
+    transform: rotate(30deg);
+    pointer-events: none;
+    z-index: 50;
+}
+
+.phone-screen {
+    width: 100%;
+    height: 100%;
+    background: white;
+    border-radius: 32px;
+    position: relative;
+    overflow: hidden;
+}
+
+.phone-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    background: white;
+}
+
+/* Slide Animations setup by JS or infinite CSS animation */
+/* We will use CSS keyframes for auto-rotation since JS might not be loaded for it */
+@keyframes slideRotate {
+    0%, 15% { opacity: 1; z-index: 10; }
+    20%, 95% { opacity: 0; z-index: 0; }
+    100% { opacity: 1; z-index: 10; }
+}
+
+.slide-welcome { background: var(--primary-blue); text-align: center; animation: slideRotate 15s infinite; animation-delay: 0s; }
+.slide-chat { animation: slideRotate 15s infinite; animation-delay: 3s; justify-content: flex-start; padding-top: 3rem; }
+.slide-timeline { animation: slideRotate 15s infinite; animation-delay: 6s; }
+.slide-quiz { animation: slideRotate 15s infinite; animation-delay: 9s; justify-content: center; }
+.slide-map { animation: slideRotate 15s infinite; animation-delay: 12s; padding: 0; justify-content: space-between; }
+
+/* Mock elements for slides */
+.mock-chat-bubble {
+    padding: 10px 15px;
+    border-radius: 16px;
+    margin-bottom: 12px;
+    font-size: 0.8rem;
+    max-width: 85%;
+    line-height: 1.4;
+}
+.mock-ai { background: #f0f0f0; color: #333; border-bottom-left-radius: 4px; align-self: flex-start; }
+.mock-user { background: var(--primary-blue); color: white; border-bottom-right-radius: 4px; align-self: flex-end; margin-left: auto; }
+
+.mock-timeline-item { font-size: 0.85rem; font-weight: 500; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+.mock-timeline-item.pulsing { color: var(--primary-blue); font-weight: 700; animation: pulseText 1.5s infinite; }
+@keyframes pulseText { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+.mock-quiz-option { padding: 12px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 8px; font-size: 0.8rem; font-weight: 500; color: #555; }
+.mock-quiz-option.correct { background: rgba(76, 175, 80, 0.1); border-color: #4CAF50; color: #2e7d32; }
+
+.mock-map-bg { flex-grow: 1; background: #e0f2fe; position: relative; border-bottom: 2px solid var(--primary-blue); }
+
+@media (max-width: 992px) {
+    .phone-mockup {
+        display: none; /* Hide phone on smaller screens to save space */
+    }
+}
+

@@ -149,10 +149,6 @@ You MUST format EVERY response exactly like this, no exceptions:
                 finalSystemInstruction += "\n\nCRITICAL: The user has requested 'Explain Simply'. You MUST explain this as if speaking to an absolute beginner. Use very simple words, analogies, and keep it extremely easy to understand.";
             }
 
-            const requestBody = {
-                contents: chatHistory,
-                system_instruction: { parts: [{ text: finalSystemInstruction }] },
-                generationConfig: {
             // Updated to hit local backend
             const response = await fetch('/api/chat', {
                 method: 'POST',
