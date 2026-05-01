@@ -26,10 +26,23 @@ html {
     scroll-behavior: smooth;
 }
 
+html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+img, svg {
+    max-width: 100%;
+    height: auto;
 }
 
 body {
@@ -257,6 +270,10 @@ a {
 
 .nav-links a:hover::after, .nav-links a.active::after {
     width: 100%;
+}
+
+.hamburger-btn {
+    display: none;
 }
 
 /* Hero Section */
@@ -857,23 +874,28 @@ body { margin: 0; padding: 0; font-size: 13px; }
 }
 .nav-links li { width: 100%; }
 .nav-links a { 
-    display: block; 
+    display: flex; 
+    align-items: center;
     font-size: 14px !important; 
-    padding: 12px !important; 
+    padding: 12px 15px !important; 
+    min-height: 48px;
+    width: 100%;
 }
 
-/* CSS-only Hamburger Toggle using hover/focus state as a fallback */
-.nav-container::after {
+/* JavaScript Hamburger Toggle */
+.hamburger-btn {
     content: "☰";
     font-size: 24px;
     cursor: pointer;
     color: var(--primary-blue);
     display: flex;
     align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
 }
-.nav-container:hover .nav-links,
-.nav-container:focus-within .nav-links,
-.nav-container:active .nav-links {
+
+.nav-links.active {
     display: flex !important;
 }
 
@@ -897,19 +919,19 @@ body { margin: 0; padding: 0; font-size: 13px; }
 .chat-message.ai-message { justify-content: flex-start; }
 .chat-message.user-message .message-content { 
     max-width: 85% !important; 
-    font-size: 13px !important; 
+    font-size: 14px !important; 
     line-height: 1.6 !important; 
     padding: 10px 14px !important; 
 }
 .chat-message.ai-message .message-content { 
     max-width: 90% !important; 
-    font-size: 13px !important; 
+    font-size: 14px !important; 
     line-height: 1.6 !important; 
     padding: 10px 14px !important; 
 }
 
 /* Explain Simply Toggle - Mobile Base */
-#explain-simply-toggle { font-size: 12px; margin-top: 8px; justify-content: center; }
+#explain-simply-toggle { font-size: 13px; margin: 10px 0; justify-content: center; min-height: 44px; }
 
 /* Quick Question Chips - Mobile Base */
 .suggested-prompts { 
@@ -940,9 +962,10 @@ body { margin: 0; padding: 0; font-size: 13px; }
     left: 0; 
     width: 100% !important; 
     padding: 10px 12px !important; 
+    padding-bottom: calc(10px + env(safe-area-inset-bottom)) !important;
     background: rgba(255, 255, 255, 0.95); 
     box-sizing: border-box; 
-    z-index: 100; 
+    z-index: 999; 
 }
 .chat-input-area { 
     width: 100%; 
@@ -955,17 +978,17 @@ body { margin: 0; padding: 0; font-size: 13px; }
     border: none !important; 
     background: transparent !important; 
 }
-#chat-input { flex: 1; min-width: 0; }
+#chat-input { flex-grow: 1; min-width: 0; font-size: 16px !important; }
 #mic-btn { 
-    width: 36px !important; 
-    height: 36px !important; 
-    min-width: 36px !important; 
+    width: 44px !important; 
+    height: 44px !important; 
+    min-width: 44px !important; 
     padding: 0 !important; 
     min-height: 44px; /* Accessibility */
 }
 #send-btn { 
-    font-size: 13px !important; 
-    padding: 8px 16px !important; 
+    font-size: 14px !important; 
+    padding: 0 16px !important; 
     white-space: nowrap; 
     min-height: 44px; /* Accessibility */
 }

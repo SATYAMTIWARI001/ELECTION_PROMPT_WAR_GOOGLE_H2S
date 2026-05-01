@@ -1,4 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Mobile Navigation & Viewport Logic
+    const hamburgerBtn = document.getElementById('mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    if (hamburgerBtn && navLinks) {
+        hamburgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navLinks.classList.toggle('active');
+        });
+        document.addEventListener('click', (e) => {
+            if (!navLinks.contains(e.target) && e.target !== hamburgerBtn) {
+                navLinks.classList.remove('active');
+            }
+        });
+    }
+
+    // Android Keyboard Virtual Viewport Resize Fix
+    function adjustForKeyboard() {
+        const h = window.innerHeight;
+        document.documentElement.style.setProperty('--vh', `${h * 0.01}px`);
+        const chatWindow = document.getElementById('chat-window');
+        if (chatWindow) {
+            chatWindow.style.maxHeight = `calc(${h}px - 140px)`;
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+    }
+    window.addEventListener('resize', adjustForKeyboard);
+    adjustForKeyboard();
+
     // Modal Logic & Profile System
     const loginBtn = document.getElementById('login-btn');
     const userProfileContainer = document.getElementById('user-profile-container');
