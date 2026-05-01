@@ -546,8 +546,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', (e) => {
-            const href = link.getAttribute('href');
+            let href = link.getAttribute('href');
             const target = link.getAttribute('target');
+            
+            // Redirect home links to dashboard if logged in, but allow "Find Station" links to pass
+            if (href === 'index.html' && localStorage.getItem('username')) {
+                const linkText = link.innerText.toLowerCase();
+                if (linkText.includes('home') || link.classList.contains('logo')) {
+                    href = 'dashboard.html';
+                }
+            }
+
             // Intercept internal navigation for transitions
             if (href && !href.startsWith('#') && !href.startsWith('javascript') && target !== '_blank' && !link.classList.contains('gov-link')) {
                 e.preventDefault();
